@@ -1,0 +1,44 @@
+
+---- SERVER ----
+cors- for cross origin requests
+express- framework
+body-parser- for send post requests
+mongoose- for creating models
+nodemon- reset server in case of any change
+
+---- Client ----
+axios- for making API requests
+moment- library for working with time and date
+react-file-base64- for converting images
+redux and redux-thunk- for performing asynchronous tasks using redux
+
+
+---- Routes ----
+A route is a section of express code that associates a HTTP verb and a URL pattern and a function that
+is called to handle that pattern. 
+In HTTP verb it is like GET, Post, Delete, PUT etc.
+
+---- Controllers ----
+The contollers are dedicated for the functions that accept the requests and response.
+
+Models- For keeping all the schemas in it.
+Schema- Defining what are document will look like in mongoDB, as data is stored in documents in mongoDB 
+
+---- Await ----
+When we intend to run an operation that will take some time to complete, like saving data to database or fetching data from the database, then we use "Await and Async".
+
+---- useState ----
+It is a react hook. It basically updates the data in the text fields on the front end. Whenever we write new data in the textfields it updates the state.
+
+---- axios ----
+It is a library to send data from the front-end to the back-end
+
+
+---- Idea of MERN stack ----
+The idea is that from the react the request comes in the form of JSON, it goes to the Node in the form of JSON
+and then it gets stored in the database as the JSON file. There is no conversion and no alternatives involved. 
+So the thing is that the data comes as it is, it gets processed as it is and then it is stored in the database as
+it is. This very efficient and smart of MERN stack.
+
+---- useEffect ----
+It is a react hook that calls itself whenever a page relodes or refreshes.
