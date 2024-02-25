@@ -8,6 +8,7 @@ import logImage from './img/log.svg';
 import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
 import SignInSignUpForm from './components/LoginSignUp/loginSignUp'
+import Dashboard from './components/dashboard/dashboard';
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons';
@@ -21,8 +22,8 @@ import SignInSignUpForm from './components/LoginSignUp/loginSignUp'
       <div className="App">
         <Router>
           <Routes>
-            <Route path="/" element={<SignInSignUpForm />} />
-            
+              <Route path="/" element={<SignInSignUpForm />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
         </Router>
 
