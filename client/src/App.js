@@ -25,6 +25,7 @@ import Dashboard from './components/dashboard/dashboard';
           <Routes>
               <Route path="/" element={<SignInSignUpForm />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/stream" element={<Stream />} />
             </Routes>
         </Router>
 
