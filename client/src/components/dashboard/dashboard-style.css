@@ -93,12 +93,20 @@ button:hover {
     /* size : 10%;
     width: 15%; */
     text-align: left;
-    background-color: #E5E5E5    ;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    margin-top: 4%;
+    /* margin-bottom: 4%; */
+    background-color: #E5E5E5;
+    border-color: #1B4375;
+    border:10px double #1B4375;
     border-radius: 15px;
 }
 
 #container2 p {
-    font-weight: bold;
+    /* font-weight: bold; */
+    font-family: cursive;
+    font-size: xx-large;
   }
 
 #container12{
@@ -126,6 +134,9 @@ button:hover {
 
 #container12{
     background-color: #E5E5E5    ;
+    border-radius: 100%;
+    height: 35%;
+    width: 15%;
 }
 
 #container3 {
@@ -139,6 +150,9 @@ button:hover {
 
 #editDeleteBtn{
     margin-top: 10px;
+    /* margin-left: 5px;
+    margin-right: 5px; */
+    height: 10%;
     display: flex;
     /* justify-content: space-between; */
     flex-direction: column;
@@ -155,8 +169,10 @@ button:hover {
 } */
 
 #left img{
-    size : 30%;
-    width: 25%;
+    size: 35%;
+    width: 35%;
+    /* size : 30%;
+    width: 25%; */
     position: absolute;
     bottom: 0;
     left: 0;

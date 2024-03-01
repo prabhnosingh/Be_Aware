@@ -22,16 +22,18 @@ const Dashboard = () => {
 
         <div id="mid">
           <div id="container1">
-            <h2>Dashboard</h2>
+          <h1 style={{ fontSize: '40px', fontFamily: 'Cooper, sans-serif' }}>Dashboard</h1>
+
+            {/* <h1 style={{fontSize:'40px', fontFamily: 'Algeria', sans-serif}}>Dashboard</h1> */}
 
             <div id="container12">
               <img src={Apng} alt="Profile Initials" />
             </div>
-            <h4>abc@example.com</h4>
+            <h4 style={{marginTop:'2px', fontSize:'20px'}}>abc@example.com</h4>
           </div>
 
           <div id="container2">
-            <p>
+            <p style={{ fontSize: '30px', fontFamily: 'Cooper, sans-serif', margin:'2px', fontWeight:'lighter' }}>
               Stream information:<br />
               Color : Sandy Beach Sade<br />
               Logo url : https://logo.com
@@ -48,9 +50,16 @@ const Dashboard = () => {
           <br />
 
           <div id="editDeleteBtn">
+          <table>
+            <tr>
             <button>Edit Profile</button>
-            <br />
+            <text>&#160;</text>
             <button>Delete Profile</button>
+            </tr>
+          </table>
+            {/* <button>Edit Profile</button>
+            <br />
+            <button>Delete Profile</button> */}
           </div>
         </div>
 
