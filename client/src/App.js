@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css'; // Import your CSS file
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CreateStudent from './components/createStudent/createStudent'
+
 
 import { useState } from 'react';
 import logImage from './img/log.svg';
