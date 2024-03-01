@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { auth } from '../../firebase'; 
 import './style.css';
 import logImage from './img/log.svg';
 import regImage from './img/register.svg';
@@ -67,11 +68,35 @@ function SignInSignUpForm() {
     setIsSignUpMode(false);
   };
 
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const email = e.target.elements.email.value;
+    const password = e.target.elements.password.value;
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      console.log('Successfully signed in');
+    } catch (error) {
+      console.error('Sign in failed:', error.message);
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    const email = e.target.elements.email.value;
+    const password = e.target.elements.password.value;
+    try {
+      await auth.createUserWithEmailAndPassword(email, password);
+      console.log('Successfully signed up');
+    } catch (error) {
+      console.error('Sign up failed:', error.message);
+    }
+  };
+
   return (
     <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
       <div className="forms-container">
         <div className="signin-signup">
-          <form action="#" className="sign-in-form">
+          <form onSubmit={handleSignIn} className="sign-in-form">
             <img src={logo} className="image-logo" alt="Logo" />
             <h2 className="title">Sign in</h2>
             <div className="input-field">
@@ -84,15 +109,15 @@ function SignInSignUpForm() {
             </div>
             <input type="submit" value="Login" className="btn solid" onClick={loginHit}/>
           </form>
-          <form action="#" className="sign-up-form">
+          <form onSubmit={handleSignUp} className="sign-up-form">
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username1'/>
+              <input type="text" placeholder="Username" />
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" id='email1'/>
+              <input type="email" placeholder="Email" />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
