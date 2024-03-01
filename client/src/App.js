@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css'; // Import your CSS file
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CreateStudent from './components/createStudent/createStudent'
+import Stream from './pages/Stream';
 
 import { useState } from 'react';
 import logImage from './img/log.svg';
@@ -24,6 +25,7 @@ import Dashboard from './components/dashboard/dashboard';
           <Routes>
               <Route path="/" element={<SignInSignUpForm />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/stream" element={<Stream />} />
             </Routes>
         </Router>
 
