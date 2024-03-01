@@ -1,0 +1,137 @@
+.logoDarkRemovebgPreview1Icon {
+  height: 3.5rem;
+  width: 12.69rem;
+  position: relative;
+  object-fit: cover;
+}
+.back,
+.home {
+  /* height: 2.44rem; */
+  position: relative;
+  font-weight: 500;
+  display: inline-block;
+}
+.homeBackButton,
+.logoRemoveBgPreview {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* gap: var(--gap-139xl); */
+  gap: 3rem;
+  max-width: 100%;
+  padding: 10px 20px;
+}
+.logoRemoveBgPreview {
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-xl);
+  text-align: left;
+  font-size: var(--font-size-13xl);
+  color: var(--color-black);
+  font-family: var(--font-inter);
+}
+.logoRemoveBgPreviewWrapper {
+  width: 84.63rem;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* padding: 0 var(--padding-5xs); */
+  padding: 2rem;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.screenshotBoxChild {
+  align-self: stretch;
+  width: 90.94rem;
+  position: relative;
+  border-radius: var(--br-17xl);
+  /* background-color: var(--color-blanchedalmond); */
+  display: none;
+  max-width: 100%;
+}
+.screenshot20240208At650 {
+  height: 8.56rem;
+  width: 8.19rem;
+  position: relative;
+  object-fit: cover;
+  z-index: 2;
+}
+.letsConnectVia {
+  margin: 0;
+  /* height: 6.5rem; */
+  /* width: 46.5rem; */
+  position: relative;
+  font-size: inherit;
+  font-weight: 700;
+  font-family: inherit;
+  display: inline-block;
+  flex-shrink: 0;
+  max-width: 100%;
+  z-index: 1;
+  font-size: 2rem;
+}
+.screenshotBox {
+  align-self: stretch;
+  border-radius: var(--br-17xl);
+  /* background-color: var(--color-blanchedalmond); */
+  background-color: #FFEECB;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--padding-xl) 0 var(--padding-3xl);
+  box-sizing: border-box;
+  row-gap: 20px;
+  max-width: 100%;
+}
+.baseFrame,
+.frameParent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.frameParent {
+  width: 90.94rem;
+  flex-direction: column;
+  gap: var(--gap-13xl);
+  max-width: 101%;
+  flex-shrink: 0;
+}
+.baseFrame {
+  align-self: center;
+  flex-direction: row;
+  padding: 0;
+  box-sizing: border-box;
+  max-width: 100%;
+  text-align: left;
+  font-size: var(--font-size-29xl);
+  color: var(--color-darkslategray);
+  font-family: var(--font-jaldi);
+}
+@media screen and (max-width: 900px) {
+  .letsConnectVia {
+    font-size: var(--font-size-19xl);
+  }
+  .screenshotBox {
+    flex-wrap: wrap;
+  }
+  .frameParent {
+    gap: var(--gap-13xl);
+  }
+}
+@media screen and (max-width: 675px) {
+  .homeBackButton {
+    display: none;
+  }
+}
+@media screen and (max-width: 450px) {
+  .homeBackButton {
+    gap: var(--gap-139xl);
+  }
+  .letsConnectVia {
+    font-size: var(--font-size-10xl);
+  }
+}

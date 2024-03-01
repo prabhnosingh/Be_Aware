@@ -1,0 +1,187 @@
+.qrCodeIcon {
+  /* position: absolute; */
+  top: 5.88rem;
+  left: 8.13rem;
+  width: 16rem;
+  height: 16rem;
+  overflow: hidden;
+  margin-top: 3rem;
+}
+.scanTheCode {
+  /* position: absolute; */
+  top: 24.56rem;
+  left: 7.5rem;
+  display: inline-block;
+  width: 24.81rem;
+  /* height: 3.75rem; */
+  margin-top: 1.5rem;
+}
+.onlineConnectionImageChild {
+  /* position: absolute; */
+  top: 0;
+  left: 5rem;
+  /* width: 52.63rem; */
+  width: 120%;
+  height: 48rem;
+}
+.undrawOnlineConnection6778Icon {
+  position: absolute;
+  top: 7.75rem;
+  left: 5%;
+  /* width: 50.36rem; */
+  width: 120%;
+  height: 45.58rem;
+  overflow: hidden;
+  z-index: 1;
+}
+.onlineConnectionImage {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 33.5rem;
+  /* width: 60.38rem; */
+}
+.linkInstructionsChild {
+  height: 3.75rem;
+  width: 15rem;
+  position: relative;
+  border-radius: var(--br-11xl);
+  background-color: var(--color-blanchedalmond);
+  display: none;
+}
+.instructions {
+  height: 0.75rem;
+  position: relative;
+  font-size: var(--font-size-13xl);
+  display: inline-block;
+  font-family: var(--font-inter);
+  color: var(--color-black);
+  text-align: left;
+  z-index: 3;
+}
+.linkInstructions,
+.linkInstructionsItem {
+  border-radius: var(--br-11xl);
+  background-color: var(--color-blanchedalmond);
+}
+.linkInstructions {
+  cursor: pointer;
+  border: 0;
+  /* padding: 0.75rem var(--padding-smi) 2.25rem 1.94rem; */
+  /* position: absolute; */
+  top: 36.81rem;
+  left: 19.25rem;
+  white-space: nowrap;
+  z-index: 2;
+  padding: 20px;
+  width: 100%;
+  border-radius: 24px;
+  background-color: #ffeecb;
+  font-size: 1.2rem;
+}
+.linkInstructions1:hover,
+.linkInstructions:hover {
+  /* background-color: var(--color-wheat); */
+  background-color: wheat;
+}
+.linkInstructionsItem {
+  height: 3.75rem;
+  width: 15rem;
+  position: relative;
+  display: none;
+}
+.url {
+  height: 0.38rem;
+  position: relative;
+  font-size: var(--font-size-13xl);
+  display: inline-block;
+  font-family: var(--font-inter);
+  color: var(--color-black);
+  text-align: left;
+  z-index: 1;
+}
+.linkInstructions1 {
+  cursor: pointer;
+  border: 0;
+  /* padding: var(--padding-smi) 6rem 2.56rem 5.06rem; */
+  background-color: var(--color-blanchedalmond);
+  /* position: absolute; */
+  /* top: 36.81rem; */
+  left: 0;
+  border-radius: var(--br-11xl);
+  padding: 20px;
+  width: 100%;
+  border-radius: 24px;
+  background-color: #ffeecb;
+  font-size: 1.2rem;
+}
+.instructionsFrame {
+  height: 53.31rem;
+  /* width: 93.88rem; */
+  position: relative;
+  max-width: 106%;
+  flex-shrink: 0;
+  text-align: left;
+  font-size: 1.5rem;
+  color: #071148;
+  font-family: var(--font-jaldi);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.stream,
+.uRLInstructionFrame {
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.uRLInstructionFrame {
+  align-self: stretch;
+  height: 48rem;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0 0 0 var(--padding-mid);
+  max-width: 100%;
+}
+.stream {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: var(--padding-mid) 0 0;
+  gap: 0.88rem;
+  letter-spacing: normal;
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.rightSection {
+  width: 50%;
+  position: relative;
+}
+
+.instructionsButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-direction: row;
+  margin-top: 5rem;
+  gap: 3rem;
+}
+
+@media screen and (max-width: 900px) {
+  .url {
+    font-size: 1.63rem;
+  }
+}
+@media screen and (max-width: 450px) {
+  .scanTheCode,
+  .url {
+    font-size: var(--font-size-lgi);
+  }
+}
