@@ -10,6 +10,8 @@ import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
 import SignInSignUpForm from './components/LoginSignUp/loginSignUp'
 import Dashboard from './components/dashboard/dashboard';
+import ForgotPassword from './components/forgotPassword/forgotPassword'
+import SetPassword from './components/forgotPassword/setPassword'
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +25,9 @@ import Dashboard from './components/dashboard/dashboard';
             <Route path="/" element={<SignInSignUpForm />} />
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/stream" element={<Stream/>} />
+            <Route path="/forgotpassword" element={<ForgotPassword/>} />
+            <Route path="/setpassword" element={<SetPassword/>} />
+
             </Routes>
         </Router>
 

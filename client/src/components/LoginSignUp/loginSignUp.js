@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { auth } from '../../firebase'; 
 import './style.css';
 import logImage from './img/log.svg';
 import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
 import {firebaseApp} from './firebase.js';
+import {Link} from 'react-router-dom'
 // import 'firebase/firestore';
 
 function SignInSignUpForm() {
@@ -36,11 +36,11 @@ function SignInSignUpForm() {
         username: username,
         email: email,
         color: color,
-        url: url
+        url: url                
       });
   
       // Set sign up mode to true
-      setIsSignUpMode(true);
+      //setIsSignUpMode(true);
   
       console.log("User created successfully!");
     } catch (error) {
@@ -68,35 +68,13 @@ function SignInSignUpForm() {
     setIsSignUpMode(false);
   };
 
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    const email = e.target.elements.email.value;
-    const password = e.target.elements.password.value;
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      console.log('Successfully signed in');
-    } catch (error) {
-      console.error('Sign in failed:', error.message);
-    }
-  };
-
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    const email = e.target.elements.email.value;
-    const password = e.target.elements.password.value;
-    try {
-      await auth.createUserWithEmailAndPassword(email, password);
-      console.log('Successfully signed up');
-    } catch (error) {
-      console.error('Sign up failed:', error.message);
-    }
-  };
-
   return (
     <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
       <div className="forms-container">
         <div className="signin-signup">
-          <form onSubmit={handleSignIn} className="sign-in-form">
+
+
+          <form action="#" className="sign-in-form">
             <img src={logo} className="image-logo" alt="Logo" />
             <h2 className="title">Sign in</h2>
             <div className="input-field">
@@ -108,16 +86,20 @@ function SignInSignUpForm() {
               <input type="password" placeholder="Password" id='password'/>
             </div>
             <input type="submit" value="Login" className="btn solid" onClick={loginHit}/>
+            <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
+
           </form>
-          <form onSubmit={handleSignUp} className="sign-up-form">
+
+
+          <form action="#" className="sign-up-form">
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" />
+              <input type="text" placeholder="Username" id='username1'/>
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
+              <input type="email" placeholder="Email" id='email1'/>
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
@@ -130,7 +112,7 @@ function SignInSignUpForm() {
             <div className="input-field">
               <i className="fas fa-user"></i>
               <input type="url" placeholder="URL" id='url'/>
-            </div>S
+            </div>
             <input type="submit" className="btn" value="Sign up" onClick={SignUpHit}/>
           </form>
         </div>
