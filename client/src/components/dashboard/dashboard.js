@@ -1,13 +1,20 @@
 import React from 'react';
 import './dashboard-style.css';
+import { Link,useNavigate} from 'react-router-dom';
 
 import bewareLogo from './src/img/beaware.png'
 import Apng from './src/img/A.png';
 import GenerateStreamIcon from './src/img/Generate Stream Icon.png';
 import UndrawBusinessman from './src/img/undraw_businessman_e7v0.svg';
 import Vector from './src/img/Vector.svg'
+import EditProfilePage from '../editprofile/emailChange';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const handleProfileClick = () => {
+    // Redirect to the email page
+    navigate('/editprofile');
+  };
   return (
     <div id="dashboardMain">
       <div id="topBar">
@@ -52,7 +59,8 @@ const Dashboard = () => {
           <div id="editDeleteBtn">
           <table>
             <tr>
-            <button>Edit Profile</button>
+            <button onClick={handleProfileClick}>Edit Profile</button>
+              
             <text>&#160;</text>
             <button>Delete Profile</button>
             </tr>
