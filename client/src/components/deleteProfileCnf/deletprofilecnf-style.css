@@ -1,0 +1,57 @@
+#deletePrfoileCnf {
+    position: flex;
+    height: 100%;
+    width: 100%;  
+}
+
+#deletePrfoileCnfTopbar {
+    position: absolute;
+    top: 0;
+    left: 0; 
+    width: 100%;
+    /* z-index: 1;  */
+}
+
+#deletePrfoileCnfMain {
+    position: absolute;
+    top: 25%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    margin-left: 25%;
+    margin-right: 25%;
+    text-align: center;
+    align-items: center;
+    z-index: 1;
+}
+
+#deletePrfoileCnfMain img{
+    width: 100px;
+    size: 100px;
+    
+}
+
+.centered-image {
+    display: block;
+    margin: 0 auto;
+}
+
+#deletePrfoileCnfBtn {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+#deletePrfoileCnfBtn button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    background-color: #A6E4F6;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+}
+
+#deletePrfoileCnfBtn button:hover {
+    background-color: #0056b3;
+}
