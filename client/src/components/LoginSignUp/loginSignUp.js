@@ -105,14 +105,16 @@ function SignInSignUpForm() {
               <i className="fas fa-lock"></i>
               <input type="password" placeholder="Password" id='password1'/>
             </div>
-            <div className="input-field">
-              <i className="fas fa-user"></i>
-              <input type="color" placeholder="Color" id='color'/>
-            </div>
+            
             <div className="input-field">
               <i className="fas fa-user"></i>
               <input type="url" placeholder="URL" id='url'/>
             </div>
+            <div className="input-field">
+  <label for="colorPicker" class="label">Color</label>
+  <input type="color" id="colorPicker" placeholder="Color" class="color-picker"/>
+</div>
+
             <input type="submit" className="btn" value="Sign up" onClick={SignUpHit}/>
           </form>
         </div>
@@ -122,8 +124,7 @@ function SignInSignUpForm() {
           <div className="content">
             <h3>New here ?</h3>
             <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-              ex ratione. Aliquid!
+              Join BeAware Communtiy
             </p>
             <button className="btn transparent" id="sign-up-btn" onClick={handleSignUpMode}>
               Sign up
@@ -134,10 +135,7 @@ function SignInSignUpForm() {
         <div className="panel right-panel">
           <div className="content">
             <h3>One of us ?</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              laboriosam ad deleniti.
-            </p>
+<br></br>
             <button className="btn transparent" id="sign-in-btn" onClick={handleSignInMode}>
               Sign in
             </button>
