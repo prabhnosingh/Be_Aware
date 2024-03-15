@@ -7,16 +7,24 @@ import beAwareLogo from './src/img/logo-dark-removebg-preview 1.png'
 import deleteUserProfile from './src/img/delete_user_profile.png'
 import deleteProfileLogo from './src/img/deleteProfilelogo.png'
 
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../LoginSignUp/firebase';
+
 const DeleteProfileCnfComponent = () => {
+    const navigate = useNavigate();
 
     const redirectToDeleteProfile = () => {
         // console.log('Yes, Delete button is clicked')
-        window.location.href = '/deleteprofile';
+        // window.location.href = '/deleteprofile';
+        // firebase.auth().currentUser.delete()
+        navigate('/deleteprofile');
+
     };
 
     const redirectToDashboard = () => {
         // console.log('Cancel button is clicked')
-        window.location.href = '/dashboard';
+        // window.location.href = '/dashboard';
+        navigate('/dashboard');
     };
 
 
