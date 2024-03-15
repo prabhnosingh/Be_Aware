@@ -3,43 +3,43 @@ import './editprofile-style.css'; // Import the CSS file
 import beawareLogo from '../../../img/beaware_logo.png'; // Import the logo image
 import manageProfileImage from '../../../img/manageprofile.png'; // Import the manage profile image
 import messageImage from '../../../img/message.png';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate and useLocation hooks
+import { firebaseApp } from '../../../firebase'; // Import your Firebase configuration
 
 const EditStreamPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
+  const location = useLocation(); // Get the location object
 
   const [color, setColor] = useState('#FFFFFF'); // Initial color state
   const [newLogoUrl, setNewLogoUrl] = useState(''); // State for new logo URL
 
-  const handleChangeColor = () => {
-    // Function to handle color change
-    const newColor = getRandomColor(); // Get random color
-    setColor(newColor); // Update color state
-  };
+  const userData = location.state ? location.state.userData : null; // Retrieve userData from location state if available
 
-  const getRandomColor = () => {
-    // Function to generate a random color
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
+  const handleSaveChanges = async () => {
+    try {
+      const currentUser = firebaseApp.auth().currentUser;
+      console.log('current user :',currentUser)
+
+      // Update color in Firebase
+      await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
+        color: color
+      });
+
+      // Update new logo URL in Firebase
+      await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
+        logoUrl: newLogoUrl
+      });
+
+      // Redirect back to dashboard after saving changes
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error saving changes:', error);
     }
-    return color;
-  };
-
-  const handleNewLogoUrlChange = (e) => {
-    // Function to handle new logo URL change
-    setNewLogoUrl(e.target.value); // Update new logo URL state
-  };
-
-  const handleSaveChanges = () => {
-    // Add logic to save changes
-    console.log('New logo URL:', newLogoUrl);
   };
 
   const handleEmailClick = () => {
     // Redirect to the email page
-    navigate('/editprofile');
+    navigate('/editprofile', { state: { userData: userData } });
   };
 
   const handleSecurityClick = () => {
@@ -51,8 +51,9 @@ const EditStreamPage = () => {
     // Redirect to the stream page
     navigate('/editstream');
   };
+
   const handleBackClick = () => {
-    // Redirect to the stream page
+    // Redirect to the dashboard page
     navigate('/dashboard');
   };
 
@@ -80,7 +81,7 @@ const EditStreamPage = () => {
         <input
           type="color"
           value={color}
-          onChange={(e) => setColor(e.target.value)} // Update color on input change
+          onChange={(e) => setColor(e.target.value)}
         />
       </div>
       
@@ -89,7 +90,7 @@ const EditStreamPage = () => {
           type="url"
           placeholder="Enter new logo URL"
           value={newLogoUrl}
-          onChange={handleNewLogoUrlChange}
+          onChange={(e) => setNewLogoUrl(e.target.value)}
         />
         <button className="save-button" onClick={handleSaveChanges}>Save changes</button>
       </div>

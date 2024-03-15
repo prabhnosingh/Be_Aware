@@ -6,13 +6,15 @@ import logo from './img/beaware_logo.png';
 import {firebaseApp} from './firebase.js';
 import {Link} from 'react-router-dom'
 import {   HuePicker } from 'react-color'
- 
+import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+
 // import 'firebase/firestore';
  
 function SignInSignUpForm() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [background, setBackground] = useState('#fff');
- 
+  const navigate = useNavigate(); // Access the navigate function
+
   const handleSignUpMode = async () => {
     setIsSignUpMode(true);
   };
@@ -55,26 +57,79 @@ function SignInSignUpForm() {
     setBackground(color.hex);
   };
  
+  // const loginHit = async () => {
+  //   const username = document.getElementById("username").value;
+  //   const password = document.getElementById("password").value;
+ 
+  //   try {
+  //     // Sign in user with email and password
+  //     const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
+     
+  //     // Optionally, you can do something after successful login, like redirecting the user to another page
+  //     console.log("User logged in successfully:", userCredential.user);
+  //   } catch (error) {
+  //     // Handle login errors
+  //     console.error("Error logging in:", error.message);
+  //   }
+  // }
+ 
+  // const handleSignInMode = () => {
+  //   setIsSignUpMode(false);
+  // };
+ 
+
   const loginHit = async () => {
     const username = document.getElementById("username").value;
+    console.log(username);
     const password = document.getElementById("password").value;
+    console.log(password);
+    //const navigate = useNavigate(); // Access the navigate function
+ 
  
     try {
       // Sign in user with email and password
       const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
-     
-      // Optionally, you can do something after successful login, like redirecting the user to another page
+      const currentUser = firebaseApp.auth().currentUser;
+ 
+      if (currentUser) {
+        // Access the user's document in the "users" collection
+        const userCollectionRef = firebaseApp.firestore().collection("users");
+        const userDoc = await userCollectionRef.doc(currentUser.uid).get();
+   
+        if (userDoc.exists) {
+          // Access data of the user
+          const userData = userDoc.data();
+          console.log("User data:", userData);
+          // Save user data to local storage
+          localStorage.setItem("userData", JSON.stringify(userData));
+          const storedUserData = localStorage.getItem("userData");
+        if (storedUserData) {
+          const userData = JSON.parse(storedUserData);
+          console.log("Retrieved user data:", userData);
+        } else {
+          console.log("No user data found in local storage.");
+        }
+        } else {
+          console.log("User document does not exist.");
+        }
+      } else {
+        console.log("No user is currently signed in.");
+      }
+      console.log(userCredential.user.displayName)
       console.log("User logged in successfully:", userCredential.user);
+      navigate('/dashboard');
+ 
+ 
+ 
     } catch (error) {
       // Handle login errors
       console.error("Error logging in:", error.message);
     }
   }
- 
   const handleSignInMode = () => {
     setIsSignUpMode(false);
   };
- 
+
   return (
     <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
       <div className="forms-container">
