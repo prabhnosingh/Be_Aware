@@ -27,6 +27,7 @@ import SetPassword from './components/forgotPassword/setPassword'
             <Route path="/stream" element={<Stream/>} />
             <Route path="/forgotpassword" element={<ForgotPassword/>} />
             <Route path="/setpassword" element={<SetPassword/>} />
+            
 
             </Routes>
         </Router>
