@@ -1,4 +1,7 @@
+// 
+import React from 'react';
 import styles from "./BaseFrame.module.css";
+import { Link } from 'react-router-dom'; // Import Link component from React Router
 
 const BaseFrame = () => {
   return (
@@ -6,15 +9,20 @@ const BaseFrame = () => {
       <div className={styles.frameParent}>
         <div className={styles.logoRemoveBgPreviewWrapper}>
           <header className={styles.logoRemoveBgPreview}>
-            <img
-              className={styles.logoDarkRemovebgPreview1Icon}
-              loading="eager"
-              alt=""
-              src="/logodarkremovebgpreview-1@2x.png"
-            />
+            {/* Wrap the home button with Link */}
+            <Link to="/dashboard">
+              <img
+                className={styles.logoDarkRemovebgPreview1Icon}
+                loading="eager"
+                alt=""
+                src="/logodarkremovebgpreview-1@2x.png"
+              />
+            </Link>
             <div className={styles.homeBackButton}>
-              <div className={styles.home}>Home</div>
-              <div className={styles.back}>Back</div>
+  <Link to="/dashboard">
+    <button>Home</button>
+  </Link>
+              
             </div>
           </header>
         </div>
@@ -24,7 +32,7 @@ const BaseFrame = () => {
             className={styles.screenshot20240208At650}
             loading="eager"
             alt=""
-            src="/screenshot-20240208-at-650-1@2x.png"
+            src="/imageslogo.png"
           />
           <h3 className={styles.letsConnectVia}>
             Let’s Connect via Live Stream !
