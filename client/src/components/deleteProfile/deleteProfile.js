@@ -10,12 +10,14 @@ const DeleteProfileComponent = () => {
     return (
         <div>
                <div id="deletePrfoileTopbar">
-                    <img src={beAwareLogo} alt="BeAware Logo" />
-                    <img src={rectangle135} alt="Rectangle 135.png" className="centered-image" />
+               <img src={beAwareLogo} alt="BeAware Logo" id="bewareLogo"/>
+                    {/* <img src={rectangle135} alt="Rectangle 135.png" className="centered-image" /> */}
+                    <img src={rectangle135} alt="Rectangle 135.png"  id="rectangle135"/>
                 </div>
                 <div id="deletePrfoileMain">
                     <img src={deleteMsgLogo} alt="delete msg logo" />
-                    
+                    <br/>
+                    <br/>
                     <h3>Your account is deleted successfully</h3>
                 </div>
         </div>
