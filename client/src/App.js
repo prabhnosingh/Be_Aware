@@ -12,6 +12,9 @@ import SignInSignUpForm from './components/LoginSignUp/loginSignUp'
 import Dashboard from './components/dashboard/dashboard';
 import ForgotPassword from './components/forgotPassword/forgotPassword'
 import SetPassword from './components/forgotPassword/setPassword'
+import EditProfilePage from './components/editprofile/emailChange';
+import EditPasswordPage from './components/editprofile/editpassword/editPassword';
+import EditStreamPage from './components/editprofile/editstream/editStream';
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faCoffee } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +30,11 @@ import SetPassword from './components/forgotPassword/setPassword'
             <Route path="/stream" element={<Stream/>} />
             <Route path="/forgotpassword" element={<ForgotPassword/>} />
             <Route path="/setpassword" element={<SetPassword/>} />
-            
+
+            <Route path="/editprofile" element={<EditProfilePage/>}/>
+            <Route path="/editpassword" element={<EditPasswordPage/>}/>
+            <Route path="/editstream" element={<EditStreamPage/>}/>
+
 
             </Routes>
         </Router>

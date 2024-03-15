@@ -1,0 +1,102 @@
+/* editprofile-style.css */
+
+.navbar {
+  background-color: #E5E5E5; /* Navbar color */
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 30px; /* Adjust padding as needed */
+}
+.button-wrapper {
+  display: flex;
+  margin-right: 40px; /* Add margin between buttons */
+}
+.logo {
+  height: 80px; /* Adjust the height of the logo */
+  margin-right: 20px; /* Add some spacing between logo and buttons */
+}
+
+.navbar button {
+  background-color: #1B4375; /* Desired button color */
+  color: white; /* Text color */
+  border: none;
+  width: auto;
+  flex-grow: 1;
+  padding: 10px 40px; /* Increased padding for wider buttons */
+  margin-right: 20px; /* Add some margin between buttons */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.navbar button:hover {
+  background-color: #E5E5E5; /* Lighter color on hover */
+  color: #1B4375; /* Text color change on hover */
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px; /* Add margin to separate the image from the navbar */
+}
+
+.manage-profile-image {
+  max-width: 900px; /* Adjust the maximum width of the image */
+  max-height: 600px; 
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the left */
+  margin-top: 20px; /* Add margin to separate the input from the image */
+  margin-left: 20px; /* Adjust the margin to position the input */
+  width: 30%; /* Set the width of the input container */
+}
+.input-container p {
+  margin-bottom: 10px;
+  margin-top:70px;
+  margin-left : 40px; /* Add margin to the bottom of the paragraph */
+  color:#1B4375;
+  font-weight: bold;
+  font-size: large;
+}
+
+.input-container input {
+  padding: 19px; /* Adjust padding as needed */
+  margin-top: 10px;
+  margin-left: 30px;
+  margin-bottom: 10px; /* Add margin between input and button */
+  border: 1px solid #1B4375; /* Border color */
+  border-radius: 5px; /* Border radius */
+  width: 100%; /* Make the input field full width */
+}
+
+.save-button {
+  background-color: #1B4375; /* Desired button color */
+  color: white; /* Text color */
+  margin-left:60px;
+  border: none;
+  
+  padding: 15px 40px; /* Increased padding for wider buttons */
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.save-button:hover {
+  background-color: #E5E5E5; /* Lighter color on hover */
+  color: #1B4375; /* Text color change on hover */
+}
+/* editprofile-style.css */
+
+.message-image-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.message-image {
+  max-width: 300px; /* Adjust the width of the image */
+  max-height: 300px; /* Adjust the height of the image */
+  margin-bottom: 40px;
+  margin-right: 40px;
+}
