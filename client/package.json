@@ -13,18 +13,14 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
-
     "dom": "^0.0.3",
-
-    "firebase": "^10.8.1",
+    "firebase": "^10.9.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-file-base64": "^1.0.3",
-
     "react-router": "^6.22.3",
-
     "react-router-dom": "^6.22.3",
     "react-scripts": "^5.0.1",
     "redux": "^4.2.1",

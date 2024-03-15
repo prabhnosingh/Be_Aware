@@ -1,64 +1,91 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
-import './editprofile-style.css'; // Import the CSS file
-import beawareLogo from '../../img/beaware_logo.png'; // Import the logo image
-import manageProfileImage from '../../img/manageprofile.png'; // Import the manage profile image
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './editprofile-style.css';
+import beawareLogo from '../../img/beaware_logo.png';
+import manageProfileImage from '../../img/manageprofile.png';
 import messageImage from '../../img/message.png';
+import { useLocation } from 'react-router-dom';
+import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
 
 const EditProfilePage = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
-
+  const location = useLocation();
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
   const [newEmail, setNewEmail] = useState('');
+
+  useEffect(() => {
+    if (location.state && location.state.userData) {
+      setUserData(location.state.userData);
+    }
+  }, [location.state]);
 
   const handleEmailChange = (e) => {
     setNewEmail(e.target.value);
   };
 
-  const handleSaveChanges = () => {
-    // Add logic to save changes
-    console.log('New email:', newEmail);
+  const handleSaveChanges = async () => {
+    try {
+      // Update email locally
+      const updatedUserData = { ...userData, email: newEmail };
+      setUserData(updatedUserData);
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+
+      // Update email in Firebase
+      const currentUser = firebaseApp.auth().currentUser;
+      if (currentUser) {
+        console.log('current user',currentUser.email)
+        await currentUser.updateEmail(newEmail);
+        // Display success message
+        window.alert('Email changed successfully!');
+        // Redirect to the dashboard page
+        navigate('/dashboard');
+      } else {
+        console.error("No user is currently signed in.");
+      }
+    } catch (error) {
+      console.error("Error updating email:", error.message);
+    }
   };
 
   const handleEmailClick = () => {
-    // Redirect to the email page
     navigate('/editprofile');
   };
 
   const handleSecurityClick = () => {
-    // Redirect to the security page
     navigate('/editpassword');
   };
 
+  // const handleStreamClick = () => {
+  //   navigate('/editstream');
+  // };
+
   const handleStreamClick = () => {
-    // Redirect to the stream page
-    navigate('/editstream');
+    // Navigate to the EditStreamPage and pass userData as state
+    navigate('/editstream', { state: { userData } });
   };
+
   const handleBackClick = () => {
-    // Redirect to the stream page
     navigate('/dashboard');
   };
 
   return (
     <div>
-      {/* Navbar */}
       <nav className="navbar">
-        <img src={beawareLogo} alt="BeAware Logo" className="logo" /> {/* Logo image */}
+        <img src={beawareLogo} alt="BeAware Logo" className="logo" />
         <div className="button-wrapper">
           <button onClick={handleEmailClick}>Email</button>
           <button onClick={handleSecurityClick}>Security</button>
           <button onClick={handleStreamClick}>Stream</button>
-          <button onClick={handleBackClick}>Back</button> {/* Go back functionality */}
+          <button onClick={handleBackClick}>Back</button>
         </div>
       </nav>
 
-      {/* Image */}
       <div className="image-container">
         <img src={manageProfileImage} alt="Manage Profile" className="manage-profile-image" />
       </div>
 
-      {/* Input Field and Button */}
       <div className="input-container">
-        <p style={{ color: '#1B4375' }}>Your current email is abc@gmail.com</p>
+        <p style={{ color: '#1B4375' }}>Your current email is {userData ? userData.email : ""}</p>
         <input
           type="text"
           placeholder="Enter your new email"
@@ -67,7 +94,7 @@ const EditProfilePage = () => {
         />
         <button className="save-button" onClick={handleSaveChanges}>Save Changes</button>
       </div>
-      {/* JSX code */}
+
       <div className="message-image-container">
         <img src={messageImage} alt="Message Image" className="message-image" />
       </div>
