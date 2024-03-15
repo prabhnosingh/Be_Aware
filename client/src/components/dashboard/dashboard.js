@@ -62,7 +62,7 @@ const Dashboard = () => {
           <div id="container3">
           {/* <img src={GenerateStreamIcon} alt="Generate Stream Icon" /> */}
           <br />
-          <a href="https://www.google.com">Click to generate Stream</a>
+          <a href="/stream">Click to generate Stream</a>
           </div>
           <br />
           <div id="editDeleteBtn">

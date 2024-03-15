@@ -30,9 +30,11 @@ import EditStreamPage from './components/editprofile/editstream/editStream';
             <Route path="/stream" element={<Stream/>} />
             <Route path="/forgotpassword" element={<ForgotPassword/>} />
             <Route path="/setpassword" element={<SetPassword/>} />
+
             <Route path="/editprofile" element={<EditProfilePage/>}/>
             <Route path="/editpassword" element={<EditPasswordPage/>}/>
             <Route path="/editstream" element={<EditStreamPage/>}/>
+
 
             </Routes>
         </Router>
