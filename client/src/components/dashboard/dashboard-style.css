@@ -158,13 +158,14 @@
   } */
   
   #rightImg {
+    min-width: 300px;
     display: flex;
     justify-content: center; /* Horizontally center the content */
     align-items: center; /* Vertically center the content */
     max-width: 30%; /* Ensures the image does not exceed its container's width */
     height: auto; /* Allows the image to adjust its height according to its aspect ratio */
-    right: 0; /* Start the image at the right edge of the screen */
-    animation: slideFromRight 2s forwards; /* Apply the animation */
+    right: -100%; /* Start the image at the right edge of the screen */
+    animation: slideFromRight 2s ease forwards; /* Apply the animation */
   }
   
   @keyframes slideFromRight {
