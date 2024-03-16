@@ -34,6 +34,12 @@ const Dashboard = () => {
     navigate('/editprofile', { state: { userData: userData } });
 
   };
+
+  const handleDeleteClick = () => {
+    // Redirect to the email page
+    navigate('/deleteprofileConfirmation');
+  };
+
   return (
     <div id="dashboardMain">
       <div id="topBar">
@@ -86,7 +92,7 @@ const Dashboard = () => {
             <tr>
             <button onClick={handleProfileClick}>Edit Profile</button>
             <text>&#160;</text>
-            <button>Delete Profile</button>
+            <button onClick={handleDeleteClick}>Delete Profile</button>
             </tr>
           </table>
             {/* <button>Edit Profile</button>
