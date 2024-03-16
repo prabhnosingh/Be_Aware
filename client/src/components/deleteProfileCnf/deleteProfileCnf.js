@@ -1,5 +1,5 @@
 import React from 'react';
-import './deletprofilecnf-style.css';
+import './deleteprofilecnf-style.css';
 import rectangle135 from './src/img/Rectangle 135.png';
 import beAwareLogo from './src/img/logo-dark-removebg-preview 1.png';
 import deleteProfileLogo from './src/img/deleteProfilelogo.png';
@@ -44,8 +44,10 @@ const DeleteProfileCnfComponent = () => {
                 <div id="deletePrfoileCnfMain">
                     <h2>Delete Your Account</h2>
                     <br/>
-                    <p>Are you sure that you want to delete your account? If you delete your account, all your data will be wiped out.</p>
-                    <p>Are you absolutely sure you want to proceed?</p>
+                    <h4>Are you sure that you want to delete your account? If you delete your account, all your data will be wiped out.</h4>
+                    <br/>
+                    <h4>Are you absolutely sure you want to proceed?</h4>
+                    <br/>
                     <img src={deleteProfileLogo} alt="delete profile img"/>
                     <div id="deletePrfoileCnfBtn">
                         <table>

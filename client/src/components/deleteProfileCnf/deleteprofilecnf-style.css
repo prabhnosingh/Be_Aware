@@ -29,11 +29,14 @@
 }
 
 #deletePrfoileCnfMain {
+    width: 35%;
+    /* height: 40%; */
     position: absolute;
-    /* padding: 5%; */
+    padding: 2%;
     padding-top: 1%;
     padding-bottom: 2%;
     top: 25%;
+    left: 10%;
     background-color: #ffffff;
     border: 2px solid #000; 
     border-radius: 10px;
@@ -47,6 +50,10 @@
 
 #deletePrfoileCnfMain h2{
     color: #1B4375;
+}
+
+#deletePrfoileCnfMain h4{
+    color: #000;
 }
 
 #deletePrfoileCnfMain img{
@@ -72,7 +79,7 @@
     padding: 10px 20px;
     margin: 0 10px;
     cursor: pointer;
-    background-color: #A6E4F6;
+    background-color: #0056b3;
     color: #ffffff;
     border: none;
     border-radius: 5px;
