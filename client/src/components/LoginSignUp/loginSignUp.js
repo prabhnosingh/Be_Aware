@@ -7,11 +7,14 @@ import {firebaseApp} from './firebase.js';
 import {Link} from 'react-router-dom'
 import {   HuePicker } from 'react-color'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { useLocation } from 'react-router-dom';
 
 // import 'firebase/firestore';
  
 function SignInSignUpForm() {
-  const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const location = useLocation();
+  // const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [isSignUpMode, setIsSignUpMode] = useState(location.state ? location.state.isSignUpMode : false);
   const [background, setBackground] = useState('#fff');
   const navigate = useNavigate(); // Access the navigate function
 

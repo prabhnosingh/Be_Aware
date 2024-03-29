@@ -16,7 +16,29 @@ const DeleteProfileCnfComponent = () => {
             if (user) {
                 await user.delete();
                 console.log('User profile deleted successfully.');
-                navigate('/deleteprofile');
+                // navigate('/deleteprofile');
+            }
+        } catch (error) {
+            if (error.code === 'auth/requires-recent-login') {
+                alert('For security reasons, please log in again to delete your profile.');
+                navigate('/'); // rdirect to login page
+            } else {
+                console.error('Error deleting user profile:', error.message);
+                // Handle other errors appropriately
+                alert('Operation failed, try again...');
+            }
+        }
+    };
+
+    const redirectToSignUp = async () => {
+        try {
+            // Delete user profile
+            const user = auth.currentUser;
+            if (user) {
+                await user.delete();
+                console.log('User profile deleted successfully.');
+                console.log('User redirected to Sign Up.');
+                navigate('/', { state: { isSignUpMode: true } }); //redirect to sign up page
             }
         } catch (error) {
             if (error.code === 'auth/requires-recent-login') {
@@ -53,7 +75,8 @@ const DeleteProfileCnfComponent = () => {
                         <table>
                             <tr>
                                 <td id="deletePrfoileYesBtn">
-                                    <button onClick={redirectToDeleteProfile}>Yes, Delete</button>
+                                    {/* <button onClick={redirectToDeleteProfile}>Yes, Delete</button> */}
+                                    <button onClick={redirectToSignUp}>Yes, Delete</button>
                                 </td>
                                 <td id="deletePrfoileCancelBtn">
                                     <button onClick={redirectToDashboard}>Cancel</button>
