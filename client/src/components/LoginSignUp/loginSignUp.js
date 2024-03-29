@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './style.css';
 import logImage from './img/log.svg';
+// import logImage1 from './img/log1.png';
+
 import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
 import {firebaseApp} from './firebase.js';
@@ -21,21 +23,22 @@ function SignInSignUpForm() {
  
   const SignUpHit = async () => {
     // event.preventDefault(); // Prevent form submission
-    console.log("hello");
+    //console.log("hello");
  
     // Get form values
     const username = document.getElementById('username1').value;
     const email = document.getElementById('email1').value.trim();
     const password = document.getElementById('password1').value;
-    console.log("jashan");
     const color =background;
     const url = document.getElementById('url').value;
-    console.log("hello");
     console.log(email);
     try {
       // Create user in Firebase Authentication
+      console.log('adding in auth')
       const userCredential = await firebaseApp.auth().createUserWithEmailAndPassword(email, password);
+      console.log('cred....',userCredential)
       const user = userCredential.user;
+      console.log(user)
  
       // Add user details to Firestore collection
       await firebaseApp.firestore().collection("users").doc(user.uid).set({
@@ -44,10 +47,12 @@ function SignInSignUpForm() {
         color: color,
         url: url                
       });
+      console.log('adding in coll')
+
  
       // Set sign up mode to true
       //setIsSignUpMode(true);
- 
+      setIsSignUpMode(false)
       console.log("User created successfully!");
     } catch (error) {
       console.error("Error creating user:", error.message);
@@ -89,6 +94,7 @@ function SignInSignUpForm() {
     try {
       // Sign in user with email and password
       const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
+      console.log('user cred...',userCredential)
       const currentUser = firebaseApp.auth().currentUser;
  
       if (currentUser) {
@@ -157,7 +163,7 @@ function SignInSignUpForm() {
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username1'/>
+              <input type="text" placeholder="Stream Name" id='username1'/>
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
@@ -192,6 +198,8 @@ function SignInSignUpForm() {
             </button>
           </div>
           <img src={logImage} className="image" alt="Sign in" />
+          {/* <img src={logImage1} className="image" alt="Sign in" /> */}
+
         </div>
         <div className="panel right-panel">
           <div className="content">
