@@ -4,18 +4,24 @@ import rectangle135 from './src/img/Rectangle 135.png';
 import beAwareLogo from './src/img/logo-dark-removebg-preview 1.png';
 import deleteProfileLogo from './src/img/deleteProfilelogo.png';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase'; // Update the path to firebase as per your project
+import { auth, firebaseApp} from '../../firebase';
 
 const DeleteProfileCnfComponent = () => {
     const navigate = useNavigate();
-
+ 
     const redirectToDeleteProfile = async () => {
         try {
             // Delete user profile
             const user = auth.currentUser;
             if (user) {
-                await user.delete();
-                console.log('User profile deleted successfully.');
+
+                const db = firebaseApp.firestore(); // Access Firestore instance
+                await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
+                await user.delete(); // Delete user profile
+                console.log('User profile and data deleted successfully.');
+
+                // await user.delete();
+                // console.log('User profile deleted successfully.');
                 // navigate('/deleteprofile');
             }
         } catch (error) {
@@ -29,11 +35,13 @@ const DeleteProfileCnfComponent = () => {
             }
         }
     };
-
+ 
     const redirectToSignUp = async () => {
         try {
             // Delete user profile
             const user = auth.currentUser;
+            const db = firebaseApp.firestore(); // Access Firestore instance
+            await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
             if (user) {
                 await user.delete();
                 console.log('User profile deleted successfully.');
@@ -51,11 +59,11 @@ const DeleteProfileCnfComponent = () => {
             }
         }
     };
-
+ 
     const redirectToDashboard = () => {
         navigate('/dashboard'); // Navigate to the dashboard page
     };
-
+ 
     return (
         <div>
             <div id="deletePrfoileCnf">
@@ -89,5 +97,5 @@ const DeleteProfileCnfComponent = () => {
         </div>
     );
 }
-
+ 
 export default DeleteProfileCnfComponent;
