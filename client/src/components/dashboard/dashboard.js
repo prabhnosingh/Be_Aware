@@ -44,11 +44,31 @@ const Dashboard = () => {
     navigate('/editprofile', { state: { userData: userData } });
   };
 
+  const handleSignOut = () => {
+    firebaseApp.auth().signOut()
+      .then(() => {
+        // Handle successful sign-out
+        console.log("User signed out successfully");
+        navigate('/');
+        localStorage.removeItem("userData");
+        localStorage.removeItem("currentUser");
+ 
+        // Optionally, delete the key from user data
+        // Assuming you have access to user data and a function to delete the key
+        // Example: deleteUserKeyFromData(user.uid);
+      })
+      .catch((error) => {
+        // Handle sign-out errors
+        console.error("Error signing out:", error);
+      });
+  };
+
+
   return (
     <div id="dashboardMain">
       <div id="topBar">
         <img src={bewareLogo} alt="beaware logo" />
-        <button>Sign Out</button>
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
 
       <div id="main">
@@ -79,10 +99,14 @@ const Dashboard = () => {
           <br />
           <div id="editDeleteBtn">
             <table>
-              <tr>
+              <tbody>
+                <td>
+                <tr>
                 <button onClick={handleProfileClick}>Edit Profile</button>
                 <button onClick={handleDeleteClick}>Delete Profile</button>
               </tr>
+                </td>
+              </tbody>
             </table>
           </div>
         </div>
