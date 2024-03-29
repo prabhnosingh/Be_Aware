@@ -6,12 +6,14 @@ import manageProfileImage from '../../img/manageprofile.png';
 import messageImage from '../../img/message.png';
 import { useLocation } from 'react-router-dom';
 import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
+import { EmailAuthProvider, sendEmailVerification } from 'firebase/auth';
 
 const EditProfilePage = () => {
   const location = useLocation();
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
   const [newEmail, setNewEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (location.state && location.state.userData) {
@@ -21,6 +23,9 @@ const EditProfilePage = () => {
 
   const handleEmailChange = (e) => {
     setNewEmail(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   const handleSaveChanges = async () => {
@@ -32,9 +37,15 @@ const EditProfilePage = () => {
 
       // Update email in Firebase
       const currentUser = firebaseApp.auth().currentUser;
+      const credential = EmailAuthProvider.credential(currentUser.email, password);
+      console.log("----currentUser----");
+      console.log(credential);
       if (currentUser) {
-        console.log('current user',currentUser.email)
-        await currentUser.updateEmail(newEmail);
+        // await sendEmailVerification(credential.user);
+        await currentUser.reauthenticateWithCredential(credential).then(async() =>{
+          await currentUser.updateEmail(newEmail);
+        });
+        // Update user's email address
         // Display success message
         window.alert('Email changed successfully!');
         // Redirect to the dashboard page
@@ -91,6 +102,12 @@ const EditProfilePage = () => {
           placeholder="Enter your new email"
           value={newEmail}
           onChange={handleEmailChange}
+        />
+         <input
+          type="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={handlePasswordChange}
         />
         <button className="save-button" onClick={handleSaveChanges}>Save Changes</button>
       </div>

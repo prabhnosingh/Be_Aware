@@ -3,15 +3,22 @@ import './style.css';
 import logImage from './img/log.svg';
 import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
+import { useLocation } from 'react-router-dom';
 import {firebaseApp} from './firebase.js';
 import {Link} from 'react-router-dom'
 import {   HuePicker } from 'react-color'
 import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // import 'firebase/firestore';
  
 function SignInSignUpForm() {
-  const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const location = useLocation();
+  // const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [isSignUpMode, setIsSignUpMode] = useState(location.state ? location.state.isSignUpMode : false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [background, setBackground] = useState('#fff');
   const navigate = useNavigate(); // Access the navigate function
 
@@ -27,7 +34,6 @@ function SignInSignUpForm() {
     const username = document.getElementById('username1').value;
     const email = document.getElementById('email1').value.trim();
     const password = document.getElementById('password1').value;
-    console.log("jashan");
     const color =background;
     const url = document.getElementById('url').value;
     console.log("hello");
@@ -56,29 +62,33 @@ function SignInSignUpForm() {
   const handleChangeComplete = (color) => {
     setBackground(color.hex);
   };
- 
-  // const loginHit = async () => {
-  //   const username = document.getElementById("username").value;
-  //   const password = document.getElementById("password").value;
- 
-  //   try {
-  //     // Sign in user with email and password
-  //     const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
-     
-  //     // Optionally, you can do something after successful login, like redirecting the user to another page
-  //     console.log("User logged in successfully:", userCredential.user);
-  //   } catch (error) {
-  //     // Handle login errors
-  //     console.error("Error logging in:", error.message);
-  //   }
-  // }
- 
-  // const handleSignInMode = () => {
-  //   setIsSignUpMode(false);
-  // };
- 
 
+  const [inputValue, setInputValue] = useState('')
+  const showSwal = () => {
+    if(inputValue!=''){
+    withReactContent(Swal).fire({
+      icon:"error",
+      confirmButtonColor:"red",
+      title: <i>{inputValue}</i>,
+      // input: 'text',
+      // inputValue,
+      // preConfirm: () => {
+      //   setInputValue(Swal.getInput()?.value || '')
+      // },
+    })
+  }
+  }
+  const showSwal2 = () => {
+  Swal.fire({
+    title: 'Loading...',
+    allowOutsideClick: false,
+    onBeforeOpen: () => {
+      Swal.showLoading();
+    }
+  });
+  }
   const loginHit = async () => {
+    showSwal2();
     const username = document.getElementById("username").value;
     console.log(username);
     const password = document.getElementById("password").value;
@@ -90,7 +100,7 @@ function SignInSignUpForm() {
       // Sign in user with email and password
       const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
       const currentUser = firebaseApp.auth().currentUser;
- 
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
       if (currentUser) {
         // Access the user's document in the "users" collection
         const userCollectionRef = firebaseApp.firestore().collection("users");
@@ -122,13 +132,55 @@ function SignInSignUpForm() {
  
  
     } catch (error) {
+      Swal.close();
+      setInputValue(error.message);
+      showSwal();
+      setErrorMessage(error.message);
+      setModalOpen(true);
       // Handle login errors
       console.error("Error logging in:", error.message);
     }
   }
+
+  const handleCloseModal = () => {
+    console.log("I am in modal");
+    setModalOpen(false);
+    setErrorMessage('');
+  };
+
   const handleSignInMode = () => {
     setIsSignUpMode(false);
   };
+  const [metaTagsAdded, setMetaTagsAdded] = useState(false);
+  const addNoCacheMetaTags = () => {
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'Cache-Control';
+    meta.content = 'no-cache, no-store, must-revalidate';
+    document.head.appendChild(meta);
+
+    const meta2 = document.createElement('meta');
+    meta2.httpEquiv = 'Pragma';
+    meta2.content = 'no-cache';
+    document.head.appendChild(meta2);
+
+    const meta3 = document.createElement('meta');
+    meta3.httpEquiv = 'Expires';
+    meta3.content = '0';
+    document.head.appendChild(meta3);
+  };
+
+  // Call addNoCacheMetaTags when component mounts
+  React.useEffect(() => {
+    console.log("error occured");
+    if (!metaTagsAdded) {
+      addNoCacheMetaTags();
+      addNoCacheMetaTags();
+      setMetaTagsAdded(true);
+    }
+    // addNoCacheMetaTags();
+  }, [metaTagsAdded]);
+
+  
 
   return (
     <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
@@ -204,6 +256,7 @@ function SignInSignUpForm() {
           <img src={regImage} className="image" alt="Sign up" />
         </div>
       </div>
+      {/* <Modal isOpen={modalOpen} message={errorMessage} onClose={handleCloseModal} /> */}
     </div>
   );
 }

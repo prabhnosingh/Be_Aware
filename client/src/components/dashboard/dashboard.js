@@ -10,7 +10,9 @@ import DashboardLeftPic from './src/img/dashboardleft.png';
 import Vector from './src/img/Vector.svg'
 import DashboardPic from './src/img/dashboard.png'
 import {Link, useNavigate} from 'react-router-dom'
-
+import { firebaseApp } from '../../firebase';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 
 
@@ -19,6 +21,25 @@ const Dashboard = () => {
   const navigate=useNavigate();
   const [userData, setUserData] = useState(null);
 
+  const handleSignOut = () => {
+    firebaseApp.auth().signOut()
+      .then(() => {
+        // Handle successful sign-out
+        console.log("User signed out successfully");
+        navigate('/');
+        localStorage.removeItem("userData");
+        localStorage.removeItem("currentUser");
+
+        // Optionally, delete the key from user data
+        // Assuming you have access to user data and a function to delete the key
+        // Example: deleteUserKeyFromData(user.uid);
+      })
+      .catch((error) => {
+        // Handle sign-out errors
+        console.error("Error signing out:", error);
+      });
+  };
+
 
   useEffect(() => {
     // Fetch userData from localStorage when component mounts
@@ -26,19 +47,19 @@ const Dashboard = () => {
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
     }
+    Swal.close();
   }, []);
 
   const handleProfileClick = () => {
     // Redirect to the email page
     //navigate('/editprofile');
     navigate('/editprofile', { state: { userData: userData } });
-
   };
   return (
     <div id="dashboardMain">
       <div id="topBar">
         <img src={bewareLogo} alt="beaware logo" />
-        <button>Sign Out</button>
+        <button onClick={handleSignOut}>Sign Out</button>
       </div>
  
       <div id="main">
@@ -83,11 +104,15 @@ const Dashboard = () => {
           <br />
           <div id="editDeleteBtn">
           <table>
+            <tbody>
             <tr>
+              <td>
             <button onClick={handleProfileClick}>Edit Profile</button>
-            <text>&#160;</text>
+            <p>&#160;</p>
             <button>Delete Profile</button>
+            </td>
             </tr>
+            </tbody>
           </table>
             {/* <button>Edit Profile</button>
             <br />

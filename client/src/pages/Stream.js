@@ -5,6 +5,7 @@ import BaseFrame from '../components/BaseFrame';
 import styles from './Stream.module.css';
 import firebase from 'firebase/compat/app'; // Import the Firebase App module
 import 'firebase/compat/database';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -16,6 +17,7 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
+import { blueGrey } from '@material-ui/core/colors';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -27,6 +29,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const Stream = () => {
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    // Fetch userData from localStorage when component mounts
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
+  }, []);
+
   const [openInstructions, setOpenInstructions] = React.useState(false);
 
   const handleClickOpenInstructions = () => {
@@ -73,11 +84,12 @@ const Stream = () => {
               <button
                 className={styles.linkInstructions}
                 onClick={handleClickOpenInstructions}
+                style={{backgroundColor:userData?userData.color:blueGrey}}
               >
                 <div className={styles.linkInstructionsChild} />
                 <b className={styles.instructions}>{`Instructions `}</b>
               </button>
-              <button className={styles.linkInstructions1} onClick={handleClickOpenURL}>
+              <button className={styles.linkInstructions1} onClick={handleClickOpenURL} style={{backgroundColor:userData?userData.color:blueGrey}}>
                 <div className={styles.linkInstructionsItem} />
                 <b className={styles.url}>URL</b>
               </button>
