@@ -41,7 +41,7 @@ const Dashboard = () => {
   const handleProfileClick = () => {
     // Redirect to the email page
     // navigate('/editprofile');
-    navigate('/editprofile', { state: { userData: userData } });
+    navigate('/editpassword', { state: { userData: userData } });
   };
 
   const handleSignOut = () => {

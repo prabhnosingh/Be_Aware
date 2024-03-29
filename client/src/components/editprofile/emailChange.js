@@ -19,9 +19,9 @@ const EditProfilePage = () => {
     }
   }, [location.state]);
 
-  const handleEmailChange = (e) => {
-    setNewEmail(e.target.value);
-  };
+  // const handleEmailChange = (e) => {
+  //   setNewEmail(e.target.value);
+  // };
 
   const handleSaveChanges = async () => {
     try {
@@ -47,9 +47,9 @@ const EditProfilePage = () => {
     }
   };
 
-  const handleEmailClick = () => {
-    navigate('/editprofile');
-  };
+  // const handleEmailClick = () => {
+  //   navigate('/editprofile');
+  // };
 
   const handleSecurityClick = () => {
     navigate('/editpassword');
@@ -73,7 +73,7 @@ const EditProfilePage = () => {
       <nav className="navbar">
         <img src={beawareLogo} alt="BeAware Logo" className="logo" />
         <div className="button-wrapper">
-          <button onClick={handleEmailClick}>Email</button>
+          {/* <button onClick={handleEmailClick}>Email</button> */}
           <button onClick={handleSecurityClick}>Security</button>
           <button onClick={handleStreamClick}>Stream</button>
           <button onClick={handleBackClick}>Back</button>
@@ -83,7 +83,7 @@ const EditProfilePage = () => {
       <div className="image-container">
         <img src={manageProfileImage} alt="Manage Profile" className="manage-profile-image" />
       </div>
-
+{/* 
       <div className="input-container">
         <p style={{ color: '#1B4375' }}>Your current email is {userData ? userData.email : ""}</p>
         <input
@@ -93,7 +93,7 @@ const EditProfilePage = () => {
           onChange={handleEmailChange}
         />
         <button className="save-button" onClick={handleSaveChanges}>Save Changes</button>
-      </div>
+      </div> */}
 
       <div className="message-image-container">
         <img src={messageImage} alt="Message Image" className="message-image" />

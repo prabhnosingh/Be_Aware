@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './editprofile-style.css'; // Import the CSS file
 import beawareLogo from '../../../img/beaware_logo.png'; // Import the logo image
 import manageProfileImage from '../../../img/manageprofile.png'; // Import the manage profile image
-import messageImage from '../../../img/message.png';
+import securityImage from '../../../img/security.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate and useLocation hooks
 import { firebaseApp } from '../../../firebase'; // Import your Firebase configuration
 
@@ -75,7 +75,7 @@ const EditStreamPage = () => {
     // Redirect to the stream page
     navigate('/editstream');
   };
-
+    
   const handleBackClick = () => {
     // Redirect to the dashboard page
     navigate('/dashboard');
@@ -87,7 +87,7 @@ const EditStreamPage = () => {
       <nav className="navbar">
         <img src={beawareLogo} alt="BeAware Logo" className="logo" /> {/* Logo image */}
         <div className="button-wrapper">
-          <button onClick={handleEmailClick}>Email</button>
+          {/* <button onClick={handleEmailClick}>Email</button> */}
           <button onClick={handleSecurityClick}>Password</button>
           <button onClick={handleStreamClick}>Stream</button>
           <button onClick={handleBackClick}>Back</button> {/* Go back functionality */}
@@ -120,8 +120,8 @@ const EditStreamPage = () => {
       </div>
 
       {/* JSX code */}
-      <div className="message-image-container">
-        <img src={messageImage} alt="Message Image" className="message-image" />
+      <div className="security-image-container">
+        <img src={securityImage} alt="Security Image" className="security-image" />
       </div>
     </div>
   );
