@@ -18,15 +18,29 @@ function SignInSignUpForm() {
   // const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(location.state ? location.state.isSignUpMode : false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [background, setBackground] = useState('#fff');
   const navigate = useNavigate(); // Access the navigate function
 
   const handleSignUpMode = async () => {
     setIsSignUpMode(true);
   };
+
+  const showSwal2 = () => {
+    Swal.fire({
+      title: 'Loading...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didClose: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      }
+    });
+    }
+  var b=true;
  
-  const SignUpHit = async () => {
+  const SignUpHit = async (e) => {
+    e.preventDefault();
+    showSwal2();
     // event.preventDefault(); // Prevent form submission
     console.log("hello");
  
@@ -55,7 +69,14 @@ function SignInSignUpForm() {
       //setIsSignUpMode(true);
  
       console.log("User created successfully!");
+      // Swal.close();
+      setInputValue2("User created successfully!");
+      showSwal3();
+      // Swal.close();
     } catch (error) {
+      Swal.close();
+      setInputValue(error.message);
+      showSwal();
       console.error("Error creating user:", error.message);
     }
   }
@@ -64,6 +85,7 @@ function SignInSignUpForm() {
   };
 
   const [inputValue, setInputValue] = useState('')
+  const [inputValue2, setInputValue2] = useState('')
   const showSwal = () => {
     if(inputValue!=''){
     withReactContent(Swal).fire({
@@ -78,16 +100,25 @@ function SignInSignUpForm() {
     })
   }
   }
-  const showSwal2 = () => {
-  Swal.fire({
-    title: 'Loading...',
-    allowOutsideClick: false,
-    onBeforeOpen: () => {
-      Swal.showLoading();
-    }
-  });
+
+  const showSwal3 = () => {
+    if(inputValue2!=''){
+    withReactContent(Swal).fire({
+      icon:"success",
+      confirmButtonColor:"red",
+      title: <i>{inputValue2}</i>,
+      // input: 'text',
+      // inputValue,
+      // preConfirm: () => {
+      //   setInputValue(Swal.getInput()?.value || '')
+      // },
+    })
   }
-  const loginHit = async () => {
+  }
+
+  const loginHit = async (e) => {
+    e.preventDefault();
+    b=false;
     showSwal2();
     const username = document.getElementById("username").value;
     console.log(username);
@@ -100,12 +131,14 @@ function SignInSignUpForm() {
       // Sign in user with email and password
       const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
       const currentUser = firebaseApp.auth().currentUser;
+      console.log(currentUser);
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      console.log("after here");
       if (currentUser) {
         // Access the user's document in the "users" collection
         const userCollectionRef = firebaseApp.firestore().collection("users");
         const userDoc = await userCollectionRef.doc(currentUser.uid).get();
-   
+        console.log("##########current user####");
         if (userDoc.exists) {
           // Access data of the user
           const userData = userDoc.data();
@@ -116,37 +149,42 @@ function SignInSignUpForm() {
         if (storedUserData) {
           const userData = JSON.parse(storedUserData);
           console.log("Retrieved user data:", userData);
+          console.log(userCredential.user.displayName)
+          console.log("User logged in successfully:", userCredential.user);
+          navigate('/dashboard');
         } else {
+          Swal.close();
+          setInputValue("No user data found in local storage.");
+          showSwal();
+          showSwal();
           console.log("No user data found in local storage.");
         }
         } else {
+          Swal.close();
+          setInputValue("User document does not exist.");
+          showSwal();
+          showSwal();
           console.log("User document does not exist.");
         }
       } else {
+        Swal.close();
+        setInputValue("No user is currently signed in.");
+        showSwal();
+        showSwal();
         console.log("No user is currently signed in.");
       }
-      console.log(userCredential.user.displayName)
-      console.log("User logged in successfully:", userCredential.user);
-      navigate('/dashboard');
- 
- 
- 
     } catch (error) {
       Swal.close();
       setInputValue(error.message);
       showSwal();
-      setErrorMessage(error.message);
-      setModalOpen(true);
+      console.log(inputValue);
+      // setModalOpen(true);
       // Handle login errors
       console.error("Error logging in:", error.message);
     }
   }
+  
 
-  const handleCloseModal = () => {
-    console.log("I am in modal");
-    setModalOpen(false);
-    setErrorMessage('');
-  };
 
   const handleSignInMode = () => {
     setIsSignUpMode(false);
@@ -171,14 +209,20 @@ function SignInSignUpForm() {
 
   // Call addNoCacheMetaTags when component mounts
   React.useEffect(() => {
-    console.log("error occured");
-    if (!metaTagsAdded) {
+    console.log("error occured outer");
+    if (!metaTagsAdded && b==false) {
+      console.log("error occured inside");
       addNoCacheMetaTags();
       addNoCacheMetaTags();
       setMetaTagsAdded(true);
+      console.log("I am inside metaTags");
+    }
+    showSwal();
+    if(inputValue2!=''){
+      showSwal3();
     }
     // addNoCacheMetaTags();
-  }, [metaTagsAdded]);
+  }, [metaTagsAdded, inputValue]);
 
   
 
@@ -193,13 +237,13 @@ function SignInSignUpForm() {
             <h2 className="title">Sign in</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username'/>
+              <input type="text" placeholder="Username" id='username'autoComplete="off"/>
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" id='password'/>
+              <input type="password" placeholder="Password" id='password'autoComplete="off"/>
             </div>
-            <input type="submit" value="Login" className="btn solid" onClick={loginHit}/>
+            <input type="button" value="Login" className="btn solid" onClick={loginHit}/>
             <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
  
           </form>
@@ -209,20 +253,20 @@ function SignInSignUpForm() {
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username1'/>
+              <input type="text" placeholder="Username" id='username1'autoComplete="off"/>
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" id='email1'/>
+              <input type="email" placeholder="Email" id='email1'autoComplete="off"/>
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" id='password1'/>
+              <input type="password" placeholder="Password" id='password1'autoComplete="off"/>
             </div>
            
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="url" placeholder="URL" id='url'/>
+              <input type="url" placeholder="URL" id='url'autoComplete="off"/>
             </div>
             <div className="colorfield">
               <HuePicker color={background} onChangeComplete={handleChangeComplete} />

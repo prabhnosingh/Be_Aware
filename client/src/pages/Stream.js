@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import BaseFrame from '../components/BaseFrame';
 import styles from './Stream.module.css';
@@ -17,8 +15,8 @@ import {
 } from '@material-ui/core';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
-import { blueGrey } from '@material-ui/core/colors';
-
+import { blueGrey, red } from '@material-ui/core/colors';
+ 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
@@ -27,7 +25,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
+ 
 const Stream = () => {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
@@ -35,29 +33,30 @@ const Stream = () => {
     const storedUserData = localStorage.getItem("userData");
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
+      console.log(storedUserData);
     }
   }, []);
-
+ 
   const [openInstructions, setOpenInstructions] = React.useState(false);
-
+ 
   const handleClickOpenInstructions = () => {
     setOpenInstructions(true);
   };
-  
+ 
   const handleCloseInstructions = () => {
     setOpenInstructions(false);
   };
-
+ 
   const [openURL, setOpenURL] = React.useState(false);
-
+ 
   const handleClickOpenURL = () => {
     setOpenURL(true);
   };
-  
+ 
   const handleCloseURL = () => {
     setOpenURL(false);
   };
-
+ 
   const handleDownloadPDF = () => {
     // Construct the URL of the PDF file stored in the public folder
     const pdfUrl = process.env.PUBLIC_URL + '/streampdf.pdf';
@@ -65,12 +64,42 @@ const Stream = () => {
     window.open(pdfUrl, '_blank');
   };
 
+  
+function getContrastColor(hexColor) {
+  // Convert hex color to RGB
+  const r = parseInt(hexColor.substr(1, 2), 16);
+  const g = parseInt(hexColor.substr(3, 2), 16);
+  const b = parseInt(hexColor.substr(5, 2), 16);
+  
+  // Calculate luminance
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+  // Decide on the contrasting text color
+  return luminance > 0.5 ? 'black' : 'white';
+}
+  
+var backgroundColor = backgroundColor = userData ? userData.color : '#FF0000';
+var textColor =   textColor = getContrastColor(backgroundColor);
+
+
+useEffect(() => {
+// const backgroundColor = userData ? userData.color : '#000000';
+ backgroundColor = userData ? userData.color : '#FF0000';
+
+// const backgroundColor = userData ? userData.color : '#FFFFFF';
+// const backgroundColor = userData ? userData.color : '#1B4375'; //greyblue
+// const backgroundColor = userData ? userData.color : '#FFFF00'; //yellow
+  textColor = getContrastColor(backgroundColor);
+// const textColor = 'black';
+}, []); // Fetch data only once on component mount
+
+ 
   return (
     <div className={styles.stream}>
       <BaseFrame />
       <div className={styles.uRLInstructionFrame}>
-        <main className={styles.instructionsFrame}>
-          <section className={styles.leftSection}>
+        <main className={styles.instructionsFrame} >
+          <section className={styles.leftSection} >
             <img
               className={styles.qrCodeIcon}
               loading="eager"
@@ -80,30 +109,38 @@ const Stream = () => {
             <b
               className={styles.scanTheCode}
             >{`Scan the Code & be a part of the stream. We are waiting for you....`}</b>
-            <div className={styles.instructionsButtonsContainer}>
+            <div className={styles.instructionsButtonsContainer} >
               <button
                 className={styles.linkInstructions}
                 onClick={handleClickOpenInstructions}
-                style={{backgroundColor:userData?userData.color:blueGrey}}
+                style={{backgroundColor:backgroundColor, color: textColor}}
               >
                 <div className={styles.linkInstructionsChild} />
                 <b className={styles.instructions}>{`Instructions `}</b>
               </button>
-              <button className={styles.linkInstructions1} onClick={handleClickOpenURL} style={{backgroundColor:userData?userData.color:blueGrey}}>
+              <button className={styles.linkInstructions1} onClick={handleClickOpenURL} 
+              style={{backgroundColor:backgroundColor, color:textColor}}
+              // style={{backgroundColor:red}}
+              >
                 <div className={styles.linkInstructionsItem} />
-                <b className={styles.url}>URL</b>
+                <b 
+                className={styles.url}
+                // style={{backgroundColor:'red'}}
+                >URL</b>
               </button>
             </div>
           </section>
-          <section className={styles.rightSection}>
+          <section className={styles.rightSection} style={{backgroundColor:backgroundColor, marginLeft:'200px'}}>
             <img
               className={styles.onlineConnectionImageChild}
               loading="eager"
+              
               alt=""
               src="/group-46.svg"
             />
             <img
               className={styles.undrawOnlineConnection6778Icon}
+              backgroundColor='red'
               alt=""
               src="/undraw-online-connection-6778-1.svg"
             />
@@ -154,7 +191,7 @@ const Stream = () => {
           </DialogActions>
         </BootstrapDialog>
       </React.Fragment>
-
+ 
       <React.Fragment key="URLDialog">
         <BootstrapDialog
           onClose={handleCloseURL}
@@ -186,7 +223,7 @@ const Stream = () => {
               streaming platform to access the stream. Enjoy the content and
               participate in the discussion or activities as directed by the
               hosts. If you encounter any issues, refer to the troubleshooting
-              guide or contact support for assistance.
+              guide or contact support for assistance. 
             </Typography>
           </DialogContent>
           <DialogActions>
@@ -199,6 +236,5 @@ const Stream = () => {
     </div>
   );
 };
-
+ 
 export default Stream;
-
