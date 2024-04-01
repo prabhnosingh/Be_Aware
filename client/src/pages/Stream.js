@@ -1,9 +1,14 @@
+//************************************** Body color changes behind the images */
+
+
 import React from 'react';
 import BaseFrame from '../components/BaseFrame';
 import styles from './Stream.module.css';
 import firebase from 'firebase/compat/app'; // Import the Firebase App module
 import 'firebase/compat/database';
 import { useState, useEffect } from 'react';
+// import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
+import { firebaseApp } from '../firebase';
 import {
   Button,
   Dialog,
@@ -28,14 +33,64 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
  
 const Stream = () => {
   const [userData, setUserData] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState('#000000');
+  // const [textColor, setTextColor] = useState(null);
+  // const [backgroundColor, setBackgroundColor] = useState(() => {
+  //   // Initialize background color from local storage or default to white
+  //   return localStorage.getItem('backgroundColor') || '#FFFFFF';
+  // });
+
+  const [textColor, setTextColor] = useState(() => {
+    // Initialize text color based on the background color
+    return getContrastColor(backgroundColor);
+  });
+
+
   useEffect(() => {
-    // Fetch userData from localStorage when component mounts
-    const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    }
+    const fetchUserData = async () => {
+      try {
+        const currentUser = firebaseApp.auth().currentUser;
+        if (!currentUser) {
+          // If currentUser is null, wait for the authentication state to change
+          firebaseApp.auth().onAuthStateChanged((user) => {
+            if (user) {
+              // User is signed in, fetch user data
+              fetchUserData();
+            } else {
+              // User is signed out, handle accordingly
+            }
+          });
+          return;
+        }
+
+        const storedUserData = firebaseApp.firestore().collection('users').doc(currentUser.uid);
+        const doc = await storedUserData.get();
+        
+        if (doc.exists) {
+          const userDataFromFirestore = doc.data();
+          setUserData(userDataFromFirestore);
+          const backgroundColor = userDataFromFirestore ? userDataFromFirestore.color : '#FF0000';
+          setBackgroundColor(backgroundColor);
+          setTextColor(getContrastColor(backgroundColor));
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+
   }, []);
  
+
+
+
+
+
+
+
   const [openInstructions, setOpenInstructions] = React.useState(false);
  
   const handleClickOpenInstructions = () => {
@@ -77,20 +132,20 @@ function getContrastColor(hexColor) {
   return luminance > 0.5 ? 'black' : 'white';
 }
   
-var backgroundColor = backgroundColor = userData ? userData.color : '#FF0000';
-var textColor =   textColor = getContrastColor(backgroundColor);
+//  setBackgroundColor(userData ? userData.color : '#FF0000');
+//   setTextColor(getContrastColor(backgroundColor));
 
 
-useEffect(() => {
-// const backgroundColor = userData ? userData.color : '#000000';
- backgroundColor = userData ? userData.color : '#FF0000';
+// useEffect(() => {
+// // const backgroundColor = userData ? userData.color : '#000000';
+//  backgroundColor = userData ? userData.color : '#FF0000';
 
-// const backgroundColor = userData ? userData.color : '#FFFFFF';
-// const backgroundColor = userData ? userData.color : '#1B4375'; //greyblue
-// const backgroundColor = userData ? userData.color : '#FFFF00'; //yellow
-  textColor = getContrastColor(backgroundColor);
-// const textColor = 'black';
-}, []); // Fetch data only once on component mount
+// // const backgroundColor = userData ? userData.color : '#FFFFFF';
+// // const backgroundColor = userData ? userData.color : '#1B4375'; //greyblue
+// // const backgroundColor = userData ? userData.color : '#FFFF00'; //yellow
+//   textColor = getContrastColor(backgroundColor);
+// // const textColor = 'black';
+// }, []); // Fetch data only once on component mount
 
  
   return (
