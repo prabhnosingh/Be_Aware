@@ -88,7 +88,10 @@ const Dashboard = () => {
               <strong>STREAM INFORMATION:<br /></strong>
               Stream Name : {userData ? userData.username ?? "" : ""}! <br />
               Color: {userData ? userData.color : ""}<br />
-              Logo url: <a href={userData ? userData.url : "#"}>{userData ? userData.url ?? "" : ""}</a>
+              Logo url:<span className="small-font">{" "}
+<a href={userData ? userData.url : "#"}>
+  {userData ? userData.url ?? "" : ""}
+</a></span>
             </p>
           </div>
 
