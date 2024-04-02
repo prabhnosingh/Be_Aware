@@ -148,7 +148,7 @@ function getContrastColor(hexColor) {
             style={{backgroundColor:backgroundColor, color: textColor}}
             loading="eager"
             alt=""
-            src="/imageslogo.png"
+            src={userData && userData.url ? userData.url : "/images/logo.png"}
             // src= {userData.url}
           />
           <h3 
