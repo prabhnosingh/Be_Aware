@@ -10,7 +10,7 @@ const EditStreamPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const location = useLocation(); // Get the location object
 
-  const [color, setColor] = useState('#FFFFFF'); // Initial color state
+  const [newColor, setNewColor] = useState(''); // Initial color state
   const [newLogoUrl, setNewLogoUrl] = useState(''); // State for new logo URL
 
   const userData = location.state ? location.state.userData : null; // Retrieve userData from location state if available
@@ -30,7 +30,7 @@ const EditStreamPage = () => {
       let oldColor = '';
       let oldUrl = '';
   
-      if (!color || !newLogoUrl) {
+      if (!newColor || !newLogoUrl) {
         const userDoc = await firebaseApp.firestore().collection('users').doc(currentUser.uid).get();
         const userData = userDoc.data();
   
@@ -42,12 +42,12 @@ const EditStreamPage = () => {
       console.log(oldColor)
       console.log(oldUrl)
 
-      console.log(color)
+      console.log(newColor)
       console.log(newLogoUrl)
 
       // Update color and URL in Firebase
       await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
-        color: color || oldColor, // Use old value or default if color is empty
+        color: newColor || oldColor, // Use old value or default if color is empty
         url: newLogoUrl || oldUrl // Use old value if newLogoUrl is empty
       });
   
@@ -105,8 +105,8 @@ const EditStreamPage = () => {
         <p className="edit-text">Edit color and stream</p>
         <input
           type="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
+          value={newColor}
+          onChange={(e) => setNewColor(e.target.value)}
         />
       </div>
       
