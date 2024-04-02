@@ -10,6 +10,14 @@
 .button-wrapper {
   display: flex;
   margin-right: 40px; /* Add margin between buttons */
+  
+}
+#footer1 {
+  background-color: #1B4375; /* Background color */
+  color: #fff; /* Text color */
+  padding: 20px;
+  text-align: center;
+  margin-top: 300px;
 }
 .logo {
   height: 80px; /* Adjust the height of the logo */
@@ -108,7 +116,7 @@
 /* editprofile-style.css */
 
 .security-image-container {
-  position: absolute;
+  /* position: absolute; */
   bottom: 20px;
   right: 20px;
 }

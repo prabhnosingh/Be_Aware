@@ -128,6 +128,9 @@ const EditPasswordPage = () => {
       <div className="security-image-container">
         <img src={securityImage} alt="Security Image" className="security-image" />
       </div>
+      <div id="footer2">
+    <p>&copy; 2024 BeAware. All rights reserved.</p>
+  </div>
     </div>
   );
 };

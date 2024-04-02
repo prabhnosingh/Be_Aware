@@ -15,7 +15,13 @@
   height: 80px; /* Adjust the height of the logo */
   margin-right: 20px; /* Add some spacing between logo and buttons */
 }
-
+#footer2 {
+  background-color: #1B4375; /* Background color */
+  color: #fff; /* Text color */
+  padding: 20px;
+  text-align: center;
+  margin-top: 100px;
+}
 .navbar button {
   background-color: #1B4375; /* Desired button color */
   color: white; /* Text color */

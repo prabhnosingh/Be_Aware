@@ -55,7 +55,7 @@ document.head.appendChild(styleTag2);
       animation: wateryKeyframes,
       // grow: 'row',
       showConfirmButton: false,
-      showCloseButton: true,
+      // showCloseButton: true,
     });
     localStorage.setItem("alert","no");
   }

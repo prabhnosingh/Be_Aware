@@ -149,6 +149,8 @@ function getContrastColor(hexColor) {
 
  
   return (
+    <>
+    <div>
     <div className={styles.stream}>
       <BaseFrame />
       <div className={styles.uRLInstructionFrame}>
@@ -286,8 +288,14 @@ function getContrastColor(hexColor) {
             </Button> */}
           </DialogActions>
         </BootstrapDialog>
-      </React.Fragment>
+      </React.Fragment> 
+      
     </div>
+  </div>
+    <div id="footer">
+    <p>&copy; 2024 BeAware. All rights reserved.</p>
+  </div>
+  </>
   );
 };
  

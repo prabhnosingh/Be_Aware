@@ -82,6 +82,7 @@ const EditStreamPage = () => {
   };
 
   return (
+    <>
     <div>
       {/* Navbar */}
       <nav className="navbar">
@@ -123,7 +124,12 @@ const EditStreamPage = () => {
       <div className="security-image-container">
         <img src={securityImage} alt="Security Image" className="security-image" />
       </div>
+      
+    <div id="footer1">
+    <p>&copy; 2024 BeAware. All rights reserved.</p>
+  </div>
     </div>
+    </>
   );
 };
 

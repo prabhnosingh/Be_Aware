@@ -33,7 +33,7 @@
   #dashboardMain {
        /* display: grid; */
       opacity: 1;
-      animation: fadeIn 6s ease-in-out forwards;
+      animation: fadeIn 5s ease-in-out forwards;
   }
    
   @keyframes fadeIn {
@@ -91,6 +91,7 @@
     background-color: #1B4375; /* Background color */
     color: #fff; /* Text color */
     padding: 20px;
+    margin-top: 30px;
     text-align: center;
   }
   

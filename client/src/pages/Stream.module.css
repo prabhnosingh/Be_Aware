@@ -149,6 +149,7 @@ body {
   display: flex;
   justify-content: center;
   box-sizing: border-box;
+  margin-bottom: 30px;
 }
 .uRLInstructionFrame {
   align-self: stretch;
@@ -187,6 +188,12 @@ body {
   margin-top: 5rem;
   gap: 3rem;
 }
+  #footerD {
+    background-color: #1B4375; /* Background color */
+    color: #fff; /* Text color */
+    padding: 20px;
+    text-align: center;
+  }
 
 @media screen and (max-width: 900px) {
   .url {
