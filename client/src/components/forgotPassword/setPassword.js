@@ -46,19 +46,28 @@ const SetPassword = () => {
     };
 
     return (
-        <div className="f-container">
-            <div className="image-container">
+        <div className="f-container-set-password">
+           
+            {/* <div className="image-container-set-password">
+                <div className="background-overlay"></div>
+            </div> */}
+
+
+            <div className="left-container-set-password">
                 <img src={forgotImage} alt="Forgot Password" className="forgot-image" />
             </div>
-            <div className="form-container">
-                <h1 className="heading">Set New Password</h1>
-                <h3><br /> New Password</h3>
-                <input type="password" placeholder="New Password" value={newPassword} onChange={handleNewPasswordChange} className="input-field" />
-                <h3><br /> Confirm Password</h3>
-                <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={handleConfirmPasswordChange} className="input-field" />
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-                <button onClick={handleResetPassword} className="button">Submit</button>
+            <div className="right-container-set-password">
+
+                <div className="form-container-set-password">
+                    <h1 className="heading-set-password">Set New Password</h1>
+                    <h3><br /> New Password</h3>
+                    <input type="password" placeholder="New Password" value={newPassword} onChange={handleNewPasswordChange} className="input-field-set-password" />
+                    <h3><br /> Confirm Password</h3>
+                    <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={handleConfirmPasswordChange} className="input-field-set-password" />
+                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+                    <button onClick={handleResetPassword} className="button-set-password">Submit</button>
+                </div>
             </div>
         </div>
     );

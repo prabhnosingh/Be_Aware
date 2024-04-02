@@ -29,13 +29,14 @@ const ForgotPassword = () => {
     };
 
     return (
-        <div className="f-container">
-            <div className="left-container">
+        <div className="forgot-password-container">
+            <div className="left-container-forgot-password">
                 <div className="background-overlay"></div>
             </div>
-            <div className="right-container">
-                <div className="form-container">
-                    <h1 className="heading">Can't Sign in?</h1>
+
+            <div className="right-container-forgot-password">
+                <div className="form-container-forgot-password">
+                    <h1 className="heading-forgot-password">Can't Sign in?</h1>
                     <h3>Email</h3>
                     <p>Enter the email address associated with this account:</p>
                     <input
@@ -43,14 +44,15 @@ const ForgotPassword = () => {
                         placeholder="Email"
                         value={email}
                         onChange={handleEmailChange}
-                        className="input-field"
+                        className="input-field-forgot-password"
                     />
-                    <button onClick={handleCheckEmail} className="button">Continue</button>
+                    <button onClick={handleCheckEmail} className="button-forgot-password">Continue</button>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
                 </div>
             </div>
-        </div>
+</div>
+
     );
 };
 
