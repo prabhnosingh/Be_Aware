@@ -1,4 +1,7 @@
-//
+//************************************** Header code changes
+
+
+
 import React from 'react';
 import styles from "./BaseFrame.module.css";
 import { Link } from 'react-router-dom'; // Import Link component from React Router
@@ -8,14 +11,66 @@ import { firebaseApp } from './LoginSignUp/firebase';
  
 const BaseFrame = () => {
   const [userData, setUserData] = useState(null);
+  // var backgroundColor = userData ? userData.color : '#FFFFFF';
+  
+  // var textColor =  textColor = getContrastColor(backgroundColor);
+  const [backgroundColor, setBackgroundColor] = useState(''); // Initialize background color state
+  const [textColor, setTextColor] = useState('#000000'); // Initialize te
+ 
+ 
+  // useEffect(() => {
+  //   // Fetch userData from localStorage when component mounts
+  //   const storedUserData = localStorage.getItem("userData");
+  //   if (storedUserData) {
+  //     setUserData(JSON.parse(storedUserData));
+  //   }
+  //   backgroundColor = userData ? userData.color : '#FF0000';
+  //   textColor = getContrastColor(backgroundColor);
+    
+  // }, []);
+ 
   useEffect(() => {
-    // Fetch userData from localStorage when component mounts
-    const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    }
+    const fetchUserData = async () => {
+      try {
+        const currentUser = firebaseApp.auth().currentUser;
+        if (!currentUser) {
+          // If currentUser is null, wait for the authentication state to change
+          firebaseApp.auth().onAuthStateChanged((user) => {
+            if (user) {
+              // User is signed in, fetch user data
+              fetchUserData();
+            } else {
+              // User is signed out, handle accordingly
+            }
+          });
+          return;
+        }
+
+        const storedUserData = firebaseApp.firestore().collection('users').doc(currentUser.uid);
+        const doc = await storedUserData.get();
+        
+        if (doc.exists) {
+          const userDataFromFirestore = doc.data();
+          setUserData(userDataFromFirestore);
+          const backgroundColor = userDataFromFirestore ? userDataFromFirestore.color : '#FF0000';
+          setBackgroundColor(backgroundColor);
+          setTextColor(getContrastColor(backgroundColor));
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+
   }, []);
+ 
+ 
+ 
   console.log("#############");
+ 
   console.log(firebaseApp.auth().currentUser);
 
 
@@ -32,22 +87,19 @@ function getContrastColor(hexColor) {
   // Decide on the contrasting text color
   return luminance > 0.5 ? 'black' : 'white';
 }
-var backgroundColor = backgroundColor = userData ? userData.color : '#FF0000';
-
-var textColor =  textColor = getContrastColor(backgroundColor);
 
 
-useEffect(() => {
+// useEffect(() => {
 
 // const backgroundColor = userData ? userData.color : '#000000';
 // const backgroundColor = userData ? userData.color : '#FFFFFF';
-backgroundColor = userData ? userData.color : '#FF0000';
+// backgroundColor = userData ? userData.color : '#FF0000';
 
 // const backgroundColor = userData ? userData.color : '#1B4375'; //bluegrey
 // const backgroundColor = userData ? userData.color : '#FFFF00';//yellow
- textColor = getContrastColor(backgroundColor);
+//  textColor = getContrastColor(backgroundColor);
 // const textColor = 'black';
-}, []); // Fetch data only once on component mount
+// }, []); // Fetch data only once on component mount
 
   return (
     <div className={styles.baseFrame} 

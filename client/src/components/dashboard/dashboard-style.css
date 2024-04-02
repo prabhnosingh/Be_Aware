@@ -33,7 +33,7 @@
   #dashboardMain {
        /* display: grid; */
       opacity: 1;
-      animation: fadeIn 1s ease-in-out forwards;
+      animation: fadeIn 6s ease-in-out forwards;
   }
    
   @keyframes fadeIn {
@@ -44,6 +44,10 @@
         opacity: 1;
     }
   }
+
+  #animated-water {
+    animation: 'watery';
+  }
   
   
   /* Container styles */
@@ -53,6 +57,9 @@
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .small-font {
+    font-size: 12px; /* Adjust the font size as needed */
   }
   #container3 {
     text-align: center;
@@ -206,6 +213,24 @@
       border-radius: 15px;
   }
   
+@keyframes watery {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  75% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
   
   
   #container12{
@@ -248,3 +273,5 @@
         width: 90%;
     }
   }
+
+  

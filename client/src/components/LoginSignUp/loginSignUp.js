@@ -14,11 +14,13 @@ import withReactContent from 'sweetalert2-react-content'
 // import 'firebase/firestore';
  
 function SignInSignUpForm() {
+  const [errors, setErrors] = useState({});
   const location = useLocation();
   // const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(location.state ? location.state.isSignUpMode : false);
   const [modalOpen, setModalOpen] = useState(false);
   const [background, setBackground] = useState('#fff');
+  const [hexCode, setHexCode] = useState('#fff');
   const navigate = useNavigate(); // Access the navigate function
 
   const handleSignUpMode = async () => {
@@ -37,26 +39,74 @@ function SignInSignUpForm() {
     });
     }
   var b=true;
+
+  const handleHexCodeChange = (event) => {
+    const newHexCode = event.target.value;
+    setHexCode(newHexCode);
+    setBackground(newHexCode);
+  };
  
+  // const SignUpHit = async (e) => {
+  //   e.preventDefault();
+  //   showSwal2();
+  //   // event.preventDefault(); // Prevent form submission
+  //   console.log("hello");
+ 
+  
   const SignUpHit = async (e) => {
-    e.preventDefault();
     showSwal2();
-    // event.preventDefault(); // Prevent form submission
-    console.log("hello");
- 
+    e.preventDefault();
+    // Reset errors
+    setErrors({});
+
     // Get form values
     const username = document.getElementById('username1').value;
     const email = document.getElementById('email1').value.trim();
     const password = document.getElementById('password1').value;
     const color =background;
     const url = document.getElementById('url').value;
-    console.log("hello");
-    console.log(email);
+
+    // Validation checks
+    const newErrors = {};
+    if (!username) {
+      newErrors.username = "Please enter Stream Name.";
+    }
+    if (!email) {
+      newErrors.email = "Please enter email.";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        newErrors.email = "Invalid email format.";
+      }
+    }
+    if (!password) {
+      newErrors.password = "Please enter your password.";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters long.";
+    }
+    if (!color) {
+      newErrors.color = "Please select a color.";
+    }
+    if (!url) {
+      newErrors.url = "Please enter image URL.";
+    } else {
+      try {
+        new URL(url);
+      } catch (error) {
+        newErrors.url = "Invalid URL format.";
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+  
+    // Create user in Firebase Authentication
     try {
-      // Create user in Firebase Authentication
       const userCredential = await firebaseApp.auth().createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
- 
+  
       // Add user details to Firestore collection
       await firebaseApp.firestore().collection("users").doc(user.uid).set({
         username: username,
@@ -64,20 +114,21 @@ function SignInSignUpForm() {
         color: color,
         url: url                
       });
- 
-      // Set sign up mode to true
-      //setIsSignUpMode(true);
- 
+  
+  
       console.log("User created successfully!");
       // Swal.close();
       setInputValue2("User created successfully!");
       showSwal3();
+       // Reset sign-up mode
+       setIsSignUpMode(false);
       // Swal.close();
     } catch (error) {
       Swal.close();
       setInputValue(error.message);
       showSwal();
       console.error("Error creating user:", error.message);
+  setErrors({ ...errors, general: error.message });
     }
   }
   const handleChangeComplete = (color) => {
@@ -125,6 +176,22 @@ function SignInSignUpForm() {
     const password = document.getElementById("password").value;
     console.log(password);
     //const navigate = useNavigate(); // Access the navigate function
+   
+  setErrors({});
+
+  // Validation checks
+  const newErrors = {};
+  if (!username) {
+    newErrors.username = "Please enter Stream Name.";
+  }
+  if (!password) {
+    newErrors.password = "Please enter password.";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
  
  
     try {
@@ -146,6 +213,7 @@ function SignInSignUpForm() {
           // Save user data to local storage
           localStorage.setItem("userData", JSON.stringify(userData));
           const storedUserData = localStorage.getItem("userData");
+          localStorage.setItem("alert","yes");
         if (storedUserData) {
           const userData = JSON.parse(storedUserData);
           console.log("Retrieved user data:", userData);
@@ -227,63 +295,76 @@ function SignInSignUpForm() {
   
 
   return (
-    <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
-      <div className="forms-container">
-        <div className="signin-signup">
- 
- 
-          <form action="#" className="sign-in-form">
-            <img src={logo} className="image-logo" alt="Logo" />
-            <h2 className="title">Sign in</h2>
-            <div className="input-field">
-              <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username'autoComplete="off"/>
-            </div>
-            <div className="input-field">
-              <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" id='password'autoComplete="off"/>
-            </div>
-            <input type="button" value="Login" className="btn solid" onClick={loginHit}/>
-            <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
- 
-          </form>
- 
- 
-          <form action="#" className="sign-up-form">
-            <h2 className="title">Sign up</h2>
-            <div className="input-field">
-              <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" id='username1'autoComplete="off"/>
-            </div>
-            <div className="input-field">
-              <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" id='email1'autoComplete="off"/>
-            </div>
-            <div className="input-field">
-              <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" id='password1'autoComplete="off"/>
-            </div>
-           
-            <div className="input-field">
-              <i className="fas fa-user"></i>
-              <input type="url" placeholder="URL" id='url'autoComplete="off"/>
-            </div>
-            <div className="colorfield">
-              <HuePicker color={background} onChangeComplete={handleChangeComplete} />
-            </div>
- 
-            <input type="submit" className="btn" value="Sign up" onClick={SignUpHit}/>
-          </form>
-        </div>
-      </div>
-      <div className="panels-container">
-        <div className="panel left-panel">
-          <div className="content">
-            <h3>New here ?</h3>
-            <p>
-              Join BeAware Communtiy
-            </p>
-            <button className="btn transparent" id="sign-up-btn" onClick={handleSignUpMode}>
+<div className={isSignUpMode ? "container sign-up-mode" : "container"}>
+<div className="forms-container">
+<div className="signin-signup">
+<form action="#" className="sign-in-form">
+  <img src={logo} className="image-logo" alt="Logo" />
+  <h2 className="title">Sign in</h2>
+  <div className="input-field">
+    <i className="fas fa-user"></i>
+    <input type="text" placeholder="Stream Name" id='username'/>
+  </div>
+  {errors.username && <div className="error-message red-text">{errors.username}</div>}
+  <div className="input-field">
+    <i className="fas fa-lock"></i>
+    <input type="password" placeholder="Password" id='password'/>
+  </div>
+  {errors.password && <div className="error-message red-text">{errors.password}</div>}
+  <input type="submit" value="Login" className="btn solid" onClick={loginHit}/>
+  <Link to="/forgotpassword" className="forgot-password-link">Forgot Password?</Link>
+</form>
+<form action="#" className="sign-up-form" onSubmit={SignUpHit}>
+<h2 className="title">Sign up</h2>
+ {/* Display error message if there's an error */}
+
+<div className="input-field">
+<i className="fas fa-user"></i>
+<input type="text" placeholder="Stream name" id='username1'/>
+</div>
+{errors.username && <div className="error-message red-text">{errors.username}</div>}
+
+<div className="input-field">
+<i className="fas fa-envelope"></i>
+<input type="email" placeholder="Email" id='email1'/>
+</div>
+{errors.email && <div className="error-message red-text">{errors.email}</div>}
+
+<div className="input-field">
+<i className="fas fa-lock"></i>
+<input type="password" placeholder="Password" id='password1'/>
+</div>
+{errors.password && <div className="error-message red-text">{errors.password}</div>}
+
+<div className="input-field">
+  <i className="fas fa-user"></i>
+  <input type="url" placeholder="Image URL" id='url'/>
+</div>
+{errors.url && <div className="error-message red-text">{errors.url}</div>}
+<div className="input-field">
+  <i className="fas fa-user"></i>
+  <input 
+    type="text" 
+    id="hexcode" 
+    value={hexCode} 
+    onChange={handleHexCodeChange} 
+  />
+</div>
+{errors.color && <div className="error-message red-text">{errors.color}</div>}
+<div className="colorfield">
+  <HuePicker color={background} onChangeComplete={handleChangeComplete} />
+</div>
+
+<input type="submit" className="btn" value="Sign up" onClick={SignUpHit}/>
+</form>
+</div>
+</div>
+<div className="panels-container">
+<div className="panel left-panel">
+<div className="content">
+<h3>New here ?</h3>
+<p>Join BeAware Community</p>
+<button className="btn transparent" id="sign-up-btn" onClick={handleSignUpMode}>
               Sign up
             </button>
           </div>

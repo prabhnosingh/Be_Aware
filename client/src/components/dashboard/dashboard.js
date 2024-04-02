@@ -8,11 +8,91 @@ import {Link, useNavigate} from 'react-router-dom'
 import { firebaseApp } from '../../firebase';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useLocation } from 'react-router-dom';
+import 'sweetalert2/dist/sweetalert2.min.css'; 
 const Username = "Username"
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const location = useLocation(); // Get the location object
+  
+  const wateryKeyframes = `
+  @keyframes watery {
+    0% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(-5px);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+    75% {
+      transform: translateY(-3px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+`;
+
+// Create a <style> tag and insert the keyframes animation
+const styleTag2 = document.createElement('style');
+styleTag2.innerHTML = wateryKeyframes;
+document.head.appendChild(styleTag2);
+  function showAlert() {
+    if(localStorage.getItem("alert")=="yes"){
+    Swal.fire({
+      title: 'Hey there! 👋',
+      text: ' BE AWARE.',
+      imageUrl: 'https://www.bing.com/th/id/OGC.5e78affab2547d678e4c5458dd931381?pid=1.7&rurl=https%3a%2f%2fcdn.dribbble.com%2fusers%2f27231%2fscreenshots%2f2432051%2fwelcome.gif&ehk=F3rxBE9ife3EOU14rTWOPJg6yzVIbVZB0VGWLQ0GVmo%3d',
+      imageWidth: 400, 
+      imageHeight: 300,
+      confirmButtonText: 'Close',
+      allowOutsideClick: false, 
+      allowEscapeKey: false,
+      animation: wateryKeyframes,
+      // grow: 'row',
+      showConfirmButton: false,
+      showCloseButton: true,
+    });
+    localStorage.setItem("alert","no");
+  }
+  }
+
+  useEffect(() => {
+    const currentUser = firebaseApp.auth().currentUser;
+    showAlert();
+    if (currentUser) {
+      // Fetch user data from Firestore
+      const userRef = firebaseApp.firestore().collection('users').doc(currentUser.uid);
+      userRef.get().then((doc) => {
+        if (doc.exists) {
+          const userDataFromFirestore = doc.data();
+          setUserData(userDataFromFirestore);
+        } else {
+          console.log('No such document!');
+        }
+      }).catch((error) => {
+        console.error('Error getting document:', error);
+      });
+    }
+  }, []); // Fetch data only once on component mount
+
+
+
+
+  const handleDeleteClick = () => {
+    // Redirect to the email page
+    navigate('/deleteprofileConfirmation');
+  };
+
+  const handleProfileClick = () => {
+    // Redirect to the email page
+    // navigate('/editprofile');
+    navigate('/editpassword', { state: { userData: userData } });
+  };
 
   const handleSignOut = () => {
     firebaseApp.auth().signOut()
@@ -22,7 +102,7 @@ const Dashboard = () => {
         navigate('/');
         localStorage.removeItem("userData");
         localStorage.removeItem("currentUser");
-
+        localStorage.removeItem("alert");
         // Optionally, delete the key from user data
         // Assuming you have access to user data and a function to delete the key
         // Example: deleteUserKeyFromData(user.uid);
@@ -32,6 +112,10 @@ const Dashboard = () => {
         console.error("Error signing out:", error);
       });
   };
+
+  setTimeout(function() {
+    Swal.close();
+  }, 4000); // 10000 milliseconds = 10 seconds
 
 
   useEffect(() => {
@@ -54,19 +138,19 @@ const Dashboard = () => {
         console.error('Error getting document:', error);
       });
     }
-    Swal.close();
+    // Swal.close();
   }, []);
 
-  const handleProfileClick = () => {
-    // Redirect to the email page
-    // navigate('/editprofile');
-    navigate('/editprofile', { state: { userData: userData } });
-  };
+  // const handleProfileClick = () => {
+  //   // Redirect to the email page
+  //   // navigate('/editprofile');
+  //   navigate('/editprofile', { state: { userData: userData } });
+  // };
 
-  const handleDeleteClick = () => {
-    // Redirect to the email page
-    navigate('/deleteprofileConfirmation');
-  };
+  // const handleDeleteClick = () => {
+  //   // Redirect to the email page
+  //   navigate('/deleteprofileConfirmation');
+  // };
 
   // const handleSignOut = () => {
   //   firebaseApp.auth().signOut()

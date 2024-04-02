@@ -88,13 +88,13 @@
 }
 /* editprofile-style.css */
 
-.message-image-container {
+.security-image-container {
   position: absolute;
   bottom: 20px;
   right: 20px;
 }
 
-.message-image {
+.security-image {
   max-width: 300px; /* Adjust the width of the image */
   max-height: 300px; /* Adjust the height of the image */
   margin-bottom: 40px;
