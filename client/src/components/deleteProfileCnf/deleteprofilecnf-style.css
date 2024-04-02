@@ -3,31 +3,31 @@
     height: 100%;
     width: 100%;  
 }
-
+ 
 #deletePrfoileCnfTopbar {
     position: absolute;
     top: 0;
-    left: 0; 
+    left: 0;
     width: 100%;
     /* height: 25%; */
     /* z-index: 1;  */
 }
-
+ 
 #bewareLogo{
     position: absolute;
     top: 0;
-    left: 0; 
+    left: 0;
     z-index: 1;
     background-color: #E5E5E5;
 }
-
+ 
 #rectangle135{
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
 }
-
+ 
 #deletePrfoileCnfMain {
     width: 35%;
     /* height: 40%; */
@@ -38,16 +38,16 @@
     top: 25%;
     left: 10%;
     background-color: #ffffff;
-    border: 2px solid #000; 
+    border: 2px solid #000;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-left: 25%;
     margin-right: 25%;
     text-align: center;
     align-items: center;
     z-index: 2;
 }
-
+ 
 #deletePrfoileCnfMain h2{
     color: #1B4375;
 }
@@ -61,20 +61,20 @@
     size: 150px; */
     width: 25%;
     size: 25%;
-    
+   
 }
-
+ 
 /* .centered-image {
     display: block;
     margin: 0 auto;
 } */
-
+ 
 #deletePrfoileCnfBtn {
     margin-top: 20px;
     display: flex;
     justify-content: center;
 }
-
+ 
 #deletePrfoileCnfBtn button {
     padding: 10px 20px;
     margin: 0 10px;
@@ -84,19 +84,19 @@
     border: none;
     border-radius: 5px;
 }
-
+ 
 #deletePrfoileCnfBtn button:hover {
     background-color: #0056b3;
 }
-
+ 
 #deletePrfoileYesBtn button:hover{
     background-color: #9c0505;
 }
-
+ 
 #deletePrfoileCancelBtn button:hover{
     background-color: #28d218;
 }
-
+ 
 td {
     padding: 0 50px;
 }

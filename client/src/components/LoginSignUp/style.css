@@ -10,6 +10,9 @@ body,
 input {
   font-family: "Poppins", sans-serif;
 }
+.red-text {
+  color: red;
+}
 .label {
   font-size: 20px; /* Increase the font size */
   color: #999; /* Change the color to a lighter shade */

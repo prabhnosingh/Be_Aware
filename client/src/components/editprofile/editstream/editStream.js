@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './editprofile-style.css'; // Import the CSS file
 import beawareLogo from '../../../img/beaware_logo.png'; // Import the logo image
 import manageProfileImage from '../../../img/manageprofile.png'; // Import the manage profile image
-import messageImage from '../../../img/message.png';
+import securityImage from '../../../img/security.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate and useLocation hooks
 import { firebaseApp } from '../../../firebase'; // Import your Firebase configuration
 
@@ -18,24 +18,48 @@ const EditStreamPage = () => {
   const handleSaveChanges = async () => {
     try {
       const currentUser = firebaseApp.auth().currentUser;
-      console.log('current user :',currentUser)
+  
+      if (!currentUser) {
+        // Handle scenario where the user is not authenticated
+        throw new Error('User not authenticated');
+      }
+  
+      console.log('current user:', currentUser.email);
+  
+      // Fetch the old values from Firebase if either color or newLogoUrl is empty
+      let oldColor = '';
+      let oldUrl = '';
+  
+      if (!color || !newLogoUrl) {
+        const userDoc = await firebaseApp.firestore().collection('users').doc(currentUser.uid).get();
+        const userData = userDoc.data();
+  
+        // Set default color to light grey if color is not defined in Firebase
+        oldColor = userData.color !== undefined && userData.color !== null ? userData.color : '#CCCCCC';
+        oldUrl = userData.url || ''; // Default to empty string if url is not defined in Firebase
+      }
+  
+      console.log(oldColor)
+      console.log(oldUrl)
 
-      // Update color in Firebase
+      console.log(color)
+      console.log(newLogoUrl)
+
+      // Update color and URL in Firebase
       await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
-        color: color
+        color: color || oldColor, // Use old value or default if color is empty
+        url: newLogoUrl || oldUrl // Use old value if newLogoUrl is empty
       });
-
-      // Update new logo URL in Firebase
-      await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
-        logoUrl: newLogoUrl
-      });
-
+  
       // Redirect back to dashboard after saving changes
       navigate('/dashboard');
     } catch (error) {
       console.error('Error saving changes:', error);
+      // Display an error message to the user or handle the error gracefully
     }
   };
+  
+  
 
   const handleEmailClick = () => {
     // Redirect to the email page
@@ -51,20 +75,21 @@ const EditStreamPage = () => {
     // Redirect to the stream page
     navigate('/editstream');
   };
-
+    
   const handleBackClick = () => {
     // Redirect to the dashboard page
     navigate('/dashboard');
   };
 
   return (
+    <>
     <div>
       {/* Navbar */}
       <nav className="navbar">
         <img src={beawareLogo} alt="BeAware Logo" className="logo" /> {/* Logo image */}
         <div className="button-wrapper">
-          <button onClick={handleEmailClick}>Email</button>
-          <button onClick={handleSecurityClick}>Security</button>
+          {/* <button onClick={handleEmailClick}>Email</button> */}
+          <button onClick={handleSecurityClick}>Password</button>
           <button onClick={handleStreamClick}>Stream</button>
           <button onClick={handleBackClick}>Back</button> {/* Go back functionality */}
         </div>
@@ -96,10 +121,15 @@ const EditStreamPage = () => {
       </div>
 
       {/* JSX code */}
-      <div className="message-image-container">
-        <img src={messageImage} alt="Message Image" className="message-image" />
+      <div className="security-image-container">
+        <img src={securityImage} alt="Security Image" className="security-image" />
       </div>
+      
+    <div id="footer1">
+    <p>&copy; 2024 BeAware. All rights reserved.</p>
+  </div>
     </div>
+    </>
   );
 };
 

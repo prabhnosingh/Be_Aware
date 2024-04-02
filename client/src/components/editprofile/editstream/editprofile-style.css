@@ -10,6 +10,14 @@
 .button-wrapper {
   display: flex;
   margin-right: 40px; /* Add margin between buttons */
+  
+}
+#footer1 {
+  background-color: #1B4375; /* Background color */
+  color: #fff; /* Text color */
+  padding: 20px;
+  text-align: center;
+  margin-top: 300px;
 }
 .logo {
   height: 80px; /* Adjust the height of the logo */
@@ -107,15 +115,15 @@
 }
 /* editprofile-style.css */
 
-.message-image-container {
-  position: absolute;
+.security-image-container {
+  /* position: absolute; */
   bottom: 20px;
   right: 20px;
 }
 
-.message-image {
-  max-width: 300px; /* Adjust the width of the image */
-  max-height: 300px; /* Adjust the height of the image */
+.security-image {
+  max-width: 350px; /* Adjust the width of the image */
+  max-height: 350px; /* Adjust the height of the image */
   margin-bottom: 40px;
   margin-right: 40px;
 }

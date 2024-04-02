@@ -16,9 +16,10 @@ const DeleteProfileCnfComponent = () => {
             if (user) {
 
                 const db = firebaseApp.firestore(); // Access Firestore instance
-                await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
-                await user.delete(); // Delete user profile
-                console.log('User profile and data deleted successfully.');
+
+ await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
+  await user.delete(); // Delete user profile
+ console.log('User profile and data deleted successfully.');
 
                 // await user.delete();
                 // console.log('User profile deleted successfully.');
@@ -42,6 +43,7 @@ const DeleteProfileCnfComponent = () => {
             const user = auth.currentUser;
             const db = firebaseApp.firestore(); // Access Firestore instance
             await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
+
             if (user) {
                 await user.delete();
                 console.log('User profile deleted successfully.');
