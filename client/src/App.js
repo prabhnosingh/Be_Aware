@@ -2,7 +2,8 @@ import React from 'react';
 import './style.css'; // Import your CSS file
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Stream from './pages/Stream';
-
+import SpeechToText from './components/SpeechToText/speech';
+import Manual from './components/manual/manual'
 
 import { useState } from 'react';
 import logImage from './img/log.svg';
@@ -40,6 +41,8 @@ import EditStreamPage from './components/editprofile/editstream/editStream';
             <Route path="/editprofile" element={<EditProfilePage/>}/>
             <Route path="/editpassword" element={<EditPasswordPage/>}/>
             <Route path="/editstream" element={<EditStreamPage/>}/>
+            <Route path='/speechtotext' element={<SpeechToText/>} />
+            <Route path="/manual" element={<Manual/>}/>
             </Routes>
         </Router>
 

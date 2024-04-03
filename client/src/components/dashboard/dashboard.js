@@ -37,6 +37,13 @@ const Dashboard = () => {
   }
 `;
 
+const handleNavigate = () => {
+  navigate('/stream');
+}
+const handleNavigate2 = () => {
+navigate('/speechtotext');
+}
+
 // Create a <style> tag and insert the keyframes animation
 const styleTag2 = document.createElement('style');
 styleTag2.innerHTML = wateryKeyframes;
@@ -200,12 +207,12 @@ document.head.appendChild(styleTag2);
             </p>
           </div>
 
-          <div id="container3">
+          {/* <div id="container3">
             <br />
             <a href="/stream">Click to generate Stream</a>
-          </div>
+          </div> */}
           <br />
-          <div id="editDeleteBtn">
+          {/* <div id="editDeleteBtn">
             <table>
               <tbody>
                 <td>
@@ -216,7 +223,24 @@ document.head.appendChild(styleTag2);
                 </td>
               </tbody>
             </table>
-          </div>
+          </div> */}
+          <div id="editDeleteBtn">
+          <table>
+            <tbody>
+              <tr>
+              <td><button onClick={handleNavigate2} style={{ fontSize: '18px', padding: '10px 20px', width: '200px' }}>Speech to Text</button></td>
+                <td><button onClick={handleNavigate} style={{ fontSize: '18px', padding: '10px 20px', width: '200px' }}>Stream</button></td>
+                <td><button onClick={handleProfileClick} style={{ fontSize: '18px', padding: '10px 20px', width: '200px' }}>Edit Profile</button></td>
+                <td><button onClick={handleDeleteClick} style={{ fontSize: '18px', padding: '10px 20px' , width: '200px'}}>Delete Profile</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="container3">
+          <br />
+          <br />
+          <p style={{ fontSize: '18px', textAlign: 'center' }}>Want to learn more about the Sign Language? <Link to="/manual">Click here.</Link></p>
+        </div>
         </div>
 
         <div id="rightImg">

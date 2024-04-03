@@ -12,6 +12,7 @@ const EditStreamPage = () => {
 
   const [newColor, setNewColor] = useState(''); // Initial color state
   const [newLogoUrl, setNewLogoUrl] = useState(''); // State for new logo URL
+  const [newUsername, setNewUsername] = useState('');
 
   const userData = location.state ? location.state.userData : null; // Retrieve userData from location state if available
 
@@ -29,14 +30,16 @@ const EditStreamPage = () => {
       // Fetch the old values from Firebase if either color or newLogoUrl is empty
       let oldColor = '';
       let oldUrl = '';
+      let oldUsername = '';
   
-      if (!newColor || !newLogoUrl) {
+      if (!newColor || !newLogoUrl || !newUsername) {
         const userDoc = await firebaseApp.firestore().collection('users').doc(currentUser.uid).get();
         const userData = userDoc.data();
   
         // Set default color to light grey if color is not defined in Firebase
         oldColor = userData.color !== undefined && userData.color !== null ? userData.color : '#CCCCCC';
         oldUrl = userData.url || ''; // Default to empty string if url is not defined in Firebase
+        oldUsername = userData.username || '';
       }
   
       console.log(oldColor)
@@ -48,7 +51,8 @@ const EditStreamPage = () => {
       // Update color and URL in Firebase
       await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
         color: newColor || oldColor, // Use old value or default if color is empty
-        url: newLogoUrl || oldUrl // Use old value if newLogoUrl is empty
+        url: newLogoUrl || oldUrl, // Use old value if newLogoUrl is empty
+        username: newUsername || oldUsername
       });
   
       // Redirect back to dashboard after saving changes
@@ -102,7 +106,7 @@ const EditStreamPage = () => {
 
       {/* Input Fields and Button */}
       <div className="color-change">
-        <p className="edit-text">Edit color and stream</p>
+        <p className="edit-text">Edit Color / Stream Name / Logo URL</p>
         <input
           type="color"
           value={newColor}
@@ -111,6 +115,12 @@ const EditStreamPage = () => {
       </div>
       
       <div className="input-container">
+      <input
+          type="text"
+          placeholder="Enter new Stream Name"
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)}
+        />
         <input
           type="url"
           placeholder="Enter new logo URL"
