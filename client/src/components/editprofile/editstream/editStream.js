@@ -5,17 +5,33 @@ import manageProfileImage from '../../../img/manageprofile.png'; // Import the m
 import securityImage from '../../../img/security.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate and useLocation hooks
 import { firebaseApp } from '../../../firebase'; // Import your Firebase configuration
+import {   HuePicker } from 'react-color'
 
 const EditStreamPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const location = useLocation(); // Get the location object
+  const [errors, setErrors] = useState({});
 
   const [newColor, setNewColor] = useState(''); // Initial color state
   const [newLogoUrl, setNewLogoUrl] = useState(''); // State for new logo URL
   const [newUsername, setNewUsername] = useState('');
+  const [background, setBackground] = useState('#fff');
+  const [hexCode, setHexCode] = useState('#fff');
 
   const userData = location.state ? location.state.userData : null; // Retrieve userData from location state if available
-
+  const handleHexCodeChange = (event) => {
+    const newHexCode = event.target.value;
+    setHexCode(newHexCode);
+    setBackground(newHexCode);
+  };
+  const handleChangeComplete = (color) => {
+    setBackground(color.hex);
+  };
+  const handleColorChange = (color) => {
+    setBackground(color.hex);
+    setHexCode(color.hex);
+    setNewColor(color.hex);
+  };
   const handleSaveChanges = async () => {
     try {
       const currentUser = firebaseApp.auth().currentUser;
@@ -24,6 +40,7 @@ const EditStreamPage = () => {
         // Handle scenario where the user is not authenticated
         throw new Error('User not authenticated');
       }
+      
   
       console.log('current user:', currentUser.email);
   
@@ -32,7 +49,7 @@ const EditStreamPage = () => {
       let oldUrl = '';
       let oldUsername = '';
   
-      if (!newColor || !newLogoUrl || !newUsername) {
+      if (!hexCode || !newLogoUrl || !newUsername) {
         const userDoc = await firebaseApp.firestore().collection('users').doc(currentUser.uid).get();
         const userData = userDoc.data();
   
@@ -45,12 +62,12 @@ const EditStreamPage = () => {
       console.log(oldColor)
       console.log(oldUrl)
 
-      console.log(newColor)
+      console.log(hexCode)
       console.log(newLogoUrl)
 
       // Update color and URL in Firebase
       await firebaseApp.firestore().collection('users').doc(currentUser.uid).update({
-        color: newColor || oldColor, // Use old value or default if color is empty
+        color: hexCode || oldColor, // Use old value or default if color is empty
         url: newLogoUrl || oldUrl, // Use old value if newLogoUrl is empty
         username: newUsername || oldUsername
       });
@@ -105,14 +122,28 @@ const EditStreamPage = () => {
       </div>
 
       {/* Input Fields and Button */}
-      <div className="color-change">
+      {/* <div className="color-change">
         <p className="edit-text">Edit Color / Stream Name / Logo URL</p>
         <input
           type="color"
           value={newColor}
           onChange={(e) => setNewColor(e.target.value)}
         />
-      </div>
+      </div> */}
+      <div className="input-field" style={{ marginLeft: '60px' }}>
+  <i className="fas fa-user"></i>
+  <input 
+    type="text" 
+    id="hexcode" 
+    value={hexCode} 
+    onChange={handleHexCodeChange} 
+  />
+</div>
+
+
+<div className="colorfield" style={{ marginLeft: '90px' }}>
+<HuePicker color={background} onChange={handleColorChange} />
+</div>
       
       <div className="input-container">
       <input
