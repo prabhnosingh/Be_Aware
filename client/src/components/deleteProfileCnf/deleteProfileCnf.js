@@ -5,7 +5,7 @@ import beAwareLogo from './src/img/logo-dark-removebg-preview 1.png';
 import deleteProfileLogo from './src/img/deleteProfilelogo.png';
 import { useNavigate } from 'react-router-dom';
 import { auth, firebaseApp} from '../../firebase';
-
+ 
 const DeleteProfileCnfComponent = () => {
     const navigate = useNavigate();
  
@@ -14,12 +14,13 @@ const DeleteProfileCnfComponent = () => {
             // Delete user profile
             const user = auth.currentUser;
             if (user) {
-
+ 
                 const db = firebaseApp.firestore(); // Access Firestore instance
- await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
+ 
+await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
   await user.delete(); // Delete user profile
- console.log('User profile and data deleted successfully.');
-
+console.log('User profile and data deleted successfully.');
+ 
                 // await user.delete();
                 // console.log('User profile deleted successfully.');
                 // navigate('/deleteprofile');
@@ -40,6 +41,9 @@ const DeleteProfileCnfComponent = () => {
         try {
             // Delete user profile
             const user = auth.currentUser;
+            const db = firebaseApp.firestore(); // Access Firestore instance
+            await db.collection('users').doc(user.uid).delete(); // Delete user from Firestore database
+ 
             if (user) {
                 await user.delete();
                 console.log('User profile deleted successfully.');
@@ -72,9 +76,9 @@ const DeleteProfileCnfComponent = () => {
                 <div id="deletePrfoileCnfMain">
                     <h2>Delete Your Account</h2>
                     <br/>
-                    <h4>Are you sure that you want to delete your account? If you delete your account, all your data will be wiped out.</h4>
+                    <h4>Are you sure that you want to delete your account?<br/> If you delete your account, all your data will be wiped out.</h4>
                     <br/>
-                    <h4>Are you absolutely sure you want to proceed?</h4>
+                    {/* <h4>Are you absolutely sure you want to proceed?</h4> */}
                     <br/>
                     <img src={deleteProfileLogo} alt="delete profile img"/>
                     <div id="deletePrfoileCnfBtn">

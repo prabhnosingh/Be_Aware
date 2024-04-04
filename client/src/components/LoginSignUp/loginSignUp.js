@@ -4,24 +4,57 @@ import logImage from './img/log.svg';
 import regImage from './img/register.svg';
 import logo from './img/beaware_logo.png';
 import {firebaseApp} from './firebase.js';
-import { Link } from 'react-router-dom';
-import { HuePicker } from 'react-color';
-import { useNavigate } from 'react-router-dom';
+import {Link} from 'react-router-dom'
+import {   HuePicker } from 'react-color'
+import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
 import { useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+// import 'firebase/firestore';
+ 
 function SignInSignUpForm() {
   const [errors, setErrors] = useState({});
   const location = useLocation();
   // const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(location.state ? location.state.isSignUpMode : false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [background, setBackground] = useState('#fff');
   const [hexCode, setHexCode] = useState('#fff');
-  const navigate = useNavigate();
- 
+  const navigate = useNavigate(); // Access the navigate function
+
   const handleSignUpMode = async () => {
     setIsSignUpMode(true);
   };
+
+  const showSwal2 = () => {
+    Swal.fire({
+      title: 'Loading...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didClose: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      }
+    });
+    }
+  var b=true;
+
+  const handleHexCodeChange = (event) => {
+    const newHexCode = event.target.value;
+    setHexCode(newHexCode);
+    setBackground(newHexCode);
+  };
+ 
+  // const SignUpHit = async (e) => {
+  //   e.preventDefault();
+  //   showSwal2();
+  //   // event.preventDefault(); // Prevent form submission
+  //   console.log("hello");
+ 
   
   const SignUpHit = async (e) => {
+    showSwal2();
     e.preventDefault();
     // Reset errors
     setErrors({});
@@ -30,7 +63,7 @@ function SignInSignUpForm() {
     const username = document.getElementById('username1').value;
     const email = document.getElementById('email1').value.trim();
     const password = document.getElementById('password1').value;
-    const color = document.getElementById('hexcode').value;
+    const color =background;
     const url = document.getElementById('url').value;
 
     // Validation checks
@@ -82,28 +115,62 @@ function SignInSignUpForm() {
         url: url                
       });
   
-      // Reset sign-up mode
-      setIsSignUpMode(false);
   
       console.log("User created successfully!");
+      // Swal.close();
+      setInputValue2("User created successfully!");
+      showSwal3();
+       // Reset sign-up mode
+       setIsSignUpMode(false);
+      // Swal.close();
     } catch (error) {
+      Swal.close();
+      setInputValue(error.message);
+      showSwal();
       console.error("Error creating user:", error.message);
   setErrors({ ...errors, general: error.message });
     }
-  };
- 
+  }
   const handleChangeComplete = (color) => {
     setBackground(color.hex);
-    setHexCode(color.hex);
   };
- 
-  const handleHexCodeChange = (event) => {
-    const newHexCode = event.target.value;
-    setHexCode(newHexCode);
-    setBackground(newHexCode);
-  };
- 
-  const loginHit = async () => {
+
+  const [inputValue, setInputValue] = useState('')
+  const [inputValue2, setInputValue2] = useState('')
+  const showSwal = () => {
+    if(inputValue!=''){
+    withReactContent(Swal).fire({
+      icon:"error",
+      confirmButtonColor:"red",
+      title: <i>{inputValue}</i>,
+      // input: 'text',
+      // inputValue,
+      // preConfirm: () => {
+      //   setInputValue(Swal.getInput()?.value || '')
+      // },
+    })
+  }
+  }
+
+  const showSwal3 = () => {
+    if(inputValue2!=''){
+    withReactContent(Swal).fire({
+      icon:"success",
+      confirmButtonColor:"red",
+      title: <i>{inputValue2}</i>,
+      // input: 'text',
+      // inputValue,
+      // preConfirm: () => {
+      //   setInputValue(Swal.getInput()?.value || '')
+      // },
+    })
+  }
+  }
+
+  const loginHit = async (e) => {
+    e.preventDefault();
+    b=false;
+    showSwal2();
     const username = document.getElementById("username").value;
     console.log(username);
     const password = document.getElementById("password").value;
@@ -126,15 +193,19 @@ function SignInSignUpForm() {
     return;
   }
  
+ 
     try {
       // Sign in user with email and password
       const userCredential = await firebaseApp.auth().signInWithEmailAndPassword(username, password);
-      console.log('user cred...',userCredential)
       const currentUser = firebaseApp.auth().currentUser;
+      console.log(currentUser);
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      console.log("after here");
       if (currentUser) {
         // Access the user's document in the "users" collection
         const userCollectionRef = firebaseApp.firestore().collection("users");
         const userDoc = await userCollectionRef.doc(currentUser.uid).get();
+        console.log("##########current user####");
         if (userDoc.exists) {
           // Access data of the user
           const userData = userDoc.data();
@@ -142,31 +213,87 @@ function SignInSignUpForm() {
           // Save user data to local storage
           localStorage.setItem("userData", JSON.stringify(userData));
           const storedUserData = localStorage.getItem("userData");
-          if (storedUserData) {
-            const userData = JSON.parse(storedUserData);
-            console.log("Retrieved user data:", userData);
-          } else {
-            console.log("No user data found in local storage.");
-          }
+          localStorage.setItem("alert","yes");
+        if (storedUserData) {
+          const userData = JSON.parse(storedUserData);
+          console.log("Retrieved user data:", userData);
+          console.log(userCredential.user.displayName)
+          console.log("User logged in successfully:", userCredential.user);
+          navigate('/dashboard');
         } else {
+          Swal.close();
+          setInputValue("No user data found in local storage.");
+          showSwal();
+          showSwal();
+          console.log("No user data found in local storage.");
+        }
+        } else {
+          Swal.close();
+          setInputValue("User document does not exist.");
+          showSwal();
+          showSwal();
           console.log("User document does not exist.");
         }
       } else {
+        Swal.close();
+        setInputValue("No user is currently signed in.");
+        showSwal();
+        showSwal();
         console.log("No user is currently signed in.");
       }
-      console.log(userCredential.user.displayName)
-      console.log("User logged in successfully:", userCredential.user);
-      navigate('/dashboard');
     } catch (error) {
+      Swal.close();
+      setInputValue(error.message);
+      showSwal();
+      console.log(inputValue);
+      // setModalOpen(true);
       // Handle login errors
       console.error("Error logging in:", error.message);
     }
   }
- 
+  
+
+
   const handleSignInMode = () => {
     setIsSignUpMode(false);
   };
- 
+  const [metaTagsAdded, setMetaTagsAdded] = useState(false);
+  const addNoCacheMetaTags = () => {
+    const meta = document.createElement('meta');
+    meta.httpEquiv = 'Cache-Control';
+    meta.content = 'no-cache, no-store, must-revalidate';
+    document.head.appendChild(meta);
+
+    const meta2 = document.createElement('meta');
+    meta2.httpEquiv = 'Pragma';
+    meta2.content = 'no-cache';
+    document.head.appendChild(meta2);
+
+    const meta3 = document.createElement('meta');
+    meta3.httpEquiv = 'Expires';
+    meta3.content = '0';
+    document.head.appendChild(meta3);
+  };
+
+  // Call addNoCacheMetaTags when component mounts
+  React.useEffect(() => {
+    console.log("error occured outer");
+    if (!metaTagsAdded && b==false) {
+      console.log("error occured inside");
+      addNoCacheMetaTags();
+      addNoCacheMetaTags();
+      setMetaTagsAdded(true);
+      console.log("I am inside metaTags");
+    }
+    showSwal();
+    if(inputValue2!=''){
+      showSwal3();
+    }
+    // addNoCacheMetaTags();
+  }, [metaTagsAdded, inputValue]);
+
+  
+
   return (
 <div className={isSignUpMode ? "container sign-up-mode" : "container"}>
 <div className="forms-container">
@@ -239,22 +366,24 @@ function SignInSignUpForm() {
 <p>Join BeAware Community</p>
 <button className="btn transparent" id="sign-up-btn" onClick={handleSignUpMode}>
               Sign up
-</button>
-</div>
-<img src={logImage} className="image" alt="Sign in" />
-</div>
-<div className="panel right-panel">
-<div className="content">
-<h3>One of us ?</h3>
+            </button>
+          </div>
+          <img src={logImage} className="image" alt="Sign in" />
+        </div>
+        <div className="panel right-panel">
+          <div className="content">
+            <h3>One of us ?</h3>
 <br></br>
-<button className="btn transparent" id="sign-in-btn" onClick={handleSignInMode}>
+            <button className="btn transparent" id="sign-in-btn" onClick={handleSignInMode}>
               Sign in
-</button>
-</div>
-<img src={regImage} className="image" alt="Sign up" />
-</div>
-</div>
-</div>
+            </button>
+          </div>
+          <img src={regImage} className="image" alt="Sign up" />
+        </div>
+      </div>
+      {/* <Modal isOpen={modalOpen} message={errorMessage} onClose={handleCloseModal} /> */}
+    </div>
   );
 }
+ 
 export default SignInSignUpForm;

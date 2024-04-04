@@ -15,7 +15,13 @@
   height: 80px; /* Adjust the height of the logo */
   margin-right: 20px; /* Add some spacing between logo and buttons */
 }
-
+#footer2 {
+  background-color: #1B4375; /* Background color */
+  color: #fff; /* Text color */
+  padding: 20px;
+  text-align: center;
+  margin-top: 100px;
+}
 .navbar button {
   background-color: #1B4375; /* Desired button color */
   color: white; /* Text color */
@@ -88,13 +94,13 @@
 }
 /* editprofile-style.css */
 
-.message-image-container {
+.security-image-container {
   position: absolute;
   bottom: 20px;
   right: 20px;
 }
 
-.message-image {
+.security-image {
   max-width: 300px; /* Adjust the width of the image */
   max-height: 300px; /* Adjust the height of the image */
   margin-bottom: 40px;

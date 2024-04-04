@@ -29,7 +29,7 @@
 }
  
 #deletePrfoileCnfMain {
-    width: 35%;
+    width: 30%;
     /* height: 40%; */
     position: absolute;
     padding: 2%;
@@ -50,17 +50,21 @@
  
 #deletePrfoileCnfMain h2{
     color: #1B4375;
+    font-size: 44px;
+ 
 }
  
 #deletePrfoileCnfMain h4{
     color: #000;
+    font-size: 24px;
+ 
 }
  
 #deletePrfoileCnfMain img{
     /* width: 150px;
     size: 150px; */
     width: 25%;
-    size: 25%;
+    size: 60px;
    
 }
  

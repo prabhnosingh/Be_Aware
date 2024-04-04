@@ -1,9 +1,17 @@
+//************************************** Body color changes behind the images */
+
+
 import React from 'react';
 import BaseFrame from '../components/BaseFrame';
 import styles from './Stream.module.css';
 import firebase from 'firebase/compat/app'; // Import the Firebase App module
 import 'firebase/compat/database';
 import { useState, useEffect } from 'react';
+// import { firebaseApp } from '../../firebase'; // Import your Firebase configuration
+import { firebaseApp } from '../firebase';
+import axios from 'axios'; // Import Axios for making HTTP requests
+import QRCode from 'qrcode.react'; // Import the QRCode component
+
 import {
   Button,
   Dialog,
@@ -28,14 +36,74 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
  
 const Stream = () => {
   const [userData, setUserData] = useState(null);
-  useEffect(() => {
-    // Fetch userData from localStorage when component mounts
-    const storedUserData = localStorage.getItem("userData");
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
+  const [backgroundColor, setBackgroundColor] = useState('#000000');
+
+  const [qrCodeURL, setQrCodeURL] = useState(null);
+
+
+  // const [textColor, setTextColor] = useState(null);
+  // const [backgroundColor, setBackgroundColor] = useState(() => {
+  //   // Initialize background color from local storage or default to white
+  //   return localStorage.getItem('backgroundColor') || '#FFFFFF';
+  // });
+
+  const [textColor, setTextColor] = useState(() => {
+    // Initialize text color based on the background color
+    return getContrastColor(backgroundColor);
+  });
+  const fetchUserData = async () => {
+    try {
+      const currentUser = firebaseApp.auth().currentUser;
+      if (!currentUser) {
+        // If currentUser is null, wait for the authentication state to change
+        firebaseApp.auth().onAuthStateChanged((user) => {
+          if (user) {
+            // User is signed in, fetch user data
+            fetchUserData();
+          } else {
+            // User is signed out, handle accordingly
+          }
+        });
+        return;
+      }
+
+      const storedUserData = firebaseApp.firestore().collection('users').doc(currentUser.uid);
+      const doc = await storedUserData.get();
+      
+      if (doc.exists) {
+        const userDataFromFirestore = doc.data();
+        setUserData(userDataFromFirestore);
+        const backgroundColor = userDataFromFirestore ? userDataFromFirestore.color : '#FF0000';
+        console.log(userDataFromFirestore.username);
+        console.log(userDataFromFirestore.url);
+        console.log(userDataFromFirestore.color);
+        
+
+        console.log("***");
+        setBackgroundColor(backgroundColor);
+        setTextColor(getContrastColor(backgroundColor));
+      } else {
+        console.log('No such document!');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
     }
+  };
+
+  useEffect(() => {
+    
+
+    fetchUserData();
+
   }, []);
  
+
+
+
+
+
+
+
   const [openInstructions, setOpenInstructions] = React.useState(false);
  
   const handleClickOpenInstructions = () => {
@@ -50,6 +118,8 @@ const Stream = () => {
  
   const handleClickOpenURL = () => {
     setOpenURL(true);
+    fetchUserData()
+
   };
  
   const handleCloseURL = () => {
@@ -76,30 +146,165 @@ function getContrastColor(hexColor) {
   // Decide on the contrasting text color
   return luminance > 0.5 ? 'black' : 'white';
 }
-  
-var backgroundColor = backgroundColor = userData ? userData.color : '#FF0000';
-var textColor =   textColor = getContrastColor(backgroundColor);
 
 
-useEffect(() => {
-// const backgroundColor = userData ? userData.color : '#000000';
- backgroundColor = userData ? userData.color : '#FF0000';
+const createStream = async () => {
+  let response;
+  try {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const apiUrl = 'https://api.deafassistant.com/stream/CreateStreamWithStyle';
+    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing
 
-// const backgroundColor = userData ? userData.color : '#FFFFFF';
-// const backgroundColor = userData ? userData.color : '#1B4375'; //greyblue
-// const backgroundColor = userData ? userData.color : '#FFFF00'; //yellow
-  textColor = getContrastColor(backgroundColor);
-// const textColor = 'black';
-}, []); // Fetch data only once on component mount
+     response = await axios.post(
+      proxyUrl + apiUrl,
+      
+      {
+        // name: userData.username,
+        name: normalizedUsername, // Use normalized username
+
+        bannerColor: userData.color,
+        logoUrl: userData.url,
+      },
+      {
+        headers: {
+          'Origin': 'http://localhost:3000', // Replace with your actual origin
+          'X-Requested-With': 'XMLHttpRequest', // Optional header for some proxy services
+        },
+      }
+    );
+
+    console.log('data', response.data);
+    const { filePath } = response.data;
+    setQrCodeURL(filePath);
+    console.log(qrCodeURL + "qrcode");
+  } catch (error) {
+    console.error('Error creating stream:', error);
+    if (error.response && error.response.status === 400) {
+      console.log('Stream already exists:', error.response.data);
+      deleteStream();
+      createStream();
+      console.log(response)
+      setQrCodeURL(error.response.data.filePath); // Update QR code URL if needed
+    } else {
+      console.error('Error creating stream:', error);
+    }
+  }
+};
+
+const renameStream = async () => {
+  let response;
+  try {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const apiUrl = 'https://api.deafassistant.com/stream/RenameStream';
+
+    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing if needed
+     response = await axios.post(
+      proxyUrl + apiUrl,
+      {
+        oldName: normalizedUsername,
+        name: 'test2', // New name for the stream
+        bannerColor: userData.color, // Use color from userData
+        logoUrl: userData.url, // Use URL from userData
+      },
+      {
+        headers: {
+          'Origin': 'http://localhost:3000', // Replace with your actual origin
+          'X-Requested-With': 'XMLHttpRequest', // Optional header for some proxy services
+        },
+      }
+    );
+
+    console.log('Stream renamed:', response.data);
+  } catch (error) {
+    console.error('Error creating stream:', error);
+    if (error.response && error.response.status === 400) {
+      console.log('Stream already exists:', error.response.data);
+      console.log(response)
+      setQrCodeURL(error.response.data.filePath); // Update QR code URL if needed
+    } else {
+      console.error('Error creating stream:', error);
+    }
+  }
+};
+
+
+
+
+
+
+const deleteStream = async () => {
+  console.log('user data user --- ',userData.username)
+  try {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const apiUrl = 'https://api.deafassistant.com/stream/DeleteStream';
+
+    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing
+
+
+    const response = await axios.post(
+      proxyUrl + apiUrl,
+     
+      {
+        // oldName: userData?.username || 'Default Username', // Change this to the appropriate field for oldName
+        // oldName: userData.username
+        oldName: normalizedUsername, // Use normalized username
+
+
+      },
+      {
+        headers: {
+          'Origin': 'http://localhost:3000', // Replace with your actual origin
+          'X-Requested-With': 'XMLHttpRequest', // Optional header for some proxy services
+        },
+      }
+    );
+
+    console.log(userData.username)
+    console.log('Stream deleted:', response.data);
+    // Handle any additional logic after deleting the stream
+  } catch (error) {
+    console.error('Error deleting stream:', error);
+  }
+};
+
+  const handleCreateStream = () => {
+    console.log('in handle stream')
+    createStream();
+  };
+
+  const handleEditStream =() =>{
+    renameStream();
+  }
+
+  const handleDeleteStream = () => {
+    deleteStream();
+  };
+
+//  setBackgroundColor(userData ? userData.color : '#FF0000');
+//   setTextColor(getContrastColor(backgroundColor));
+
+
+// useEffect(() => {
+// // const backgroundColor = userData ? userData.color : '#000000';
+//  backgroundColor = userData ? userData.color : '#FF0000';
+
+// // const backgroundColor = userData ? userData.color : '#FFFFFF';
+// // const backgroundColor = userData ? userData.color : '#1B4375'; //greyblue
+// // const backgroundColor = userData ? userData.color : '#FFFF00'; //yellow
+//   textColor = getContrastColor(backgroundColor);
+// // const textColor = 'black';
+// }, []); // Fetch data only once on component mount
 
  
   return (
+    <>
+    <div>
     <div className={styles.stream}>
       <BaseFrame />
       <div className={styles.uRLInstructionFrame}>
         <main className={styles.instructionsFrame} >
           <section className={styles.leftSection} >
-            <img
+            {/* <img
               className={styles.qrCodeIcon}
               loading="eager"
               alt=""
@@ -107,7 +312,29 @@ useEffect(() => {
             />
             <b
               className={styles.scanTheCode}
-            >{`Scan the Code & be a part of the stream. We are waiting for you....`}</b>
+            >{`Scan the Code & be a part of the stream. We are waiting for you....`}</b> */}
+                        {/* <button onClick={handleCreateStream}>Create Stream</button>
+                        {qrCodeURL && <p>{qrCodeURL}</p>} */}
+
+<div>
+<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleCreateStream}>Create Stream</button>
+<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleDeleteStream}>Delete Stream</button>
+<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleEditStream}>Edit Stream</button>
+
+
+
+      {qrCodeURL && (
+    <div style={{ marginTop: '100px',marginLeft:'40px' }}>
+    <QRCode value={qrCodeURL} size={400} />
+          {/* <p>{qrCodeURL}</p> */}
+          <p>Scan and be a part of the Stream. We're excited to have you with us!</p>
+        </div>
+      )}
+    </div>
+
+
+
+
             <div className={styles.instructionsButtonsContainer} >
               <button
                 className={styles.linkInstructions}
@@ -216,14 +443,18 @@ useEffect(() => {
             <CloseIcon />
           </button>
           <DialogContent dividers>
-            <Typography gutterBottom>
-              Scan the provided QR code with your smartphone or tablet using a
-              QR code scanner app. Once scanned, you will be directed to the
-              streaming platform to access the stream. Enjoy the content and
-              participate in the discussion or activities as directed by the
-              hosts. If you encounter any issues, refer to the troubleshooting
-              guide or contact support for assistance. 
-            </Typography>
+          <Typography gutterBottom>
+  <p>
+  Access the exclusive content by copying the stream link. Indulge in lively debates and exercises facilitated by our hosts. In need of help? See our troubleshooting guide or contact our customer service staff.  </p>
+  {/* Display the URL as text */}<br/>
+  <p>
+    Stream{" "}
+    <a href={`https://deafassistant.com/${userData && userData.username.toLowerCase()}`} target="_blank" rel="noopener noreferrer">
+  {`https://deafassistant.com/${userData && userData.username.toLowerCase()}`}
+</a>
+
+  </p></Typography>
+
           </DialogContent>
           <DialogActions>
             {/* <Button autoFocus onClick={handleClose}>
@@ -231,8 +462,14 @@ useEffect(() => {
             </Button> */}
           </DialogActions>
         </BootstrapDialog>
-      </React.Fragment>
+      </React.Fragment> 
+      
     </div>
+  </div>
+    <div id="footer">
+    <p>&copy; 2024 BeAware. All rights reserved.</p>
+  </div>
+  </>
   );
 };
  
