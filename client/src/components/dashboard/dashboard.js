@@ -202,7 +202,14 @@ document.head.appendChild(styleTag2);
             <p style={{ fontSize: '30px', fontFamily: 'Poppins, sans-serif', margin: '2px', fontWeight: 'bold' }}>
               <strong>STREAM INFORMATION:<br /></strong>
               Stream Name : {userData ? userData.username ?? "" : ""}! <br />
-              Color: {userData ? userData.color : ""}<br />
+              {userData && (
+            <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
+                <span style={{ marginRight: '5px', marginLeft: '160px' }}>Color:</span> {/* Move color label to the right */}
+                <span>{userData.color}</span>
+                <div style={{ width: '30px', height: '30px', backgroundColor: userData.color, border: '1px solid #000', marginRight: '10px',marginLeft:'20px' }}></div>
+                
+            </div>
+        )}
               Logo url: <a href={ userData ? userData.url : "#"}>{userData ? userData.url.length<10? userData.url: userData.url.toString().substring(0,17)+"..." ?? "" : ""}</a>
             </p>
           </div>

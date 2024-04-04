@@ -79,7 +79,9 @@ const EditProfilePage = () => {
   return (
     <div>
       <nav className="navbar">
-        <img src={beawareLogo} alt="BeAware Logo" className="logo" />
+      <a href="/dashboard" style={{ textDecoration: 'none' }}> {/* Link to the homepage */}
+    <img src={beawareLogo} alt="BeAware Logo" className="logo" />
+</a>
         <div className="button-wrapper">
           {/* <button onClick={handleEmailClick}>Email</button> */}
           <button onClick={handleSecurityClick}>Security</button>

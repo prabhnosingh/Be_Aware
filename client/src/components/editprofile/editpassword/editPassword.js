@@ -81,7 +81,9 @@ const EditPasswordPage = () => {
     <div>
       {/* Navbar */}
       <nav className="navbar">
-        <img src={beawareLogo} alt="BeAware Logo" className="logo" /> {/* Logo image */}
+      <a href="/dashboard" style={{ textDecoration: 'none' }}> {/* Link to the homepage */}
+    <img src={beawareLogo} alt="BeAware Logo" className="logo" />
+</a>{/* Logo image */}
         <div className="button-wrapper">
         {/* <button onClick={handleEmailClick}>Email</button> */}
           <button onClick={handleSecurityClick}>Password</button>
