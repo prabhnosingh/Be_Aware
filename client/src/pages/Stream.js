@@ -39,7 +39,7 @@ const Stream = () => {
   const [backgroundColor, setBackgroundColor] = useState('#000000');
 
   const [qrCodeURL, setQrCodeURL] = useState(null);
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // const [textColor, setTextColor] = useState(null);
   // const [backgroundColor, setBackgroundColor] = useState(() => {
@@ -181,7 +181,7 @@ const createStream = async () => {
     console.error('Error creating stream:', error);
     if (error.response && error.response.status === 400) {
       console.log('Stream already exists:', error.response.data);
-      deleteStream();
+      confirmDelete();
       createStream();
       console.log(response)
       setQrCodeURL(error.response.data.filePath); // Update QR code URL if needed
@@ -230,7 +230,7 @@ const renameStream = async () => {
 
 
 
-
+const confirmDelete = () => { 
 
 const deleteStream = async () => {
   console.log('user data user --- ',userData.username)
@@ -267,6 +267,17 @@ const deleteStream = async () => {
   }
 };
 
+  setShowConfirmation(false);
+  deleteStream();
+  setQrCodeURL(null);
+};
+
+const cancelDelete = () => {
+  // Hide confirmation popup
+  setShowConfirmation(false);
+  // You might want to do something else here, like maybe closing a modal
+};
+
   const handleCreateStream = () => {
     console.log('in handle stream')
     createStream();
@@ -277,7 +288,8 @@ const deleteStream = async () => {
   }
 
   const handleDeleteStream = () => {
-    deleteStream();
+    setShowConfirmation(true);
+    // deleteStream();
   };
 
 //  setBackgroundColor(userData ? userData.color : '#FF0000');
@@ -316,21 +328,75 @@ const deleteStream = async () => {
                         {/* <button onClick={handleCreateStream}>Create Stream</button>
                         {qrCodeURL && <p>{qrCodeURL}</p>} */}
 
-<div>
-<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleCreateStream}>Create Stream</button>
-<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleDeleteStream}>Delete Stream</button>
-<button variant="contained"  style={{ marginRight: '100px' }} onClick={handleEditStream}>Edit Stream</button>
+          <div>
+          <button variant="contained"  style={{ marginRight: '100px',padding: '20px 40px', fontSize: '16px'  }} onClick={handleCreateStream}>Create Stream</button>
+          <button variant="contained"  style={{ marginRight: '100px', padding: '20px 40px', fontSize: '16px'  }} onClick={handleDeleteStream}>Delete Stream</button>
+          <button variant="contained"  style={{ marginRight: '100px', padding: '20px 40px', fontSize: '16px'  }} onClick={handleEditStream}>Edit Stream</button>
 
+          {/* {showConfirmation && (
+          <div className={`confirmation-popup ${showConfirmation ? 'show' : ''}`}>
+          <p>Are you sure you want to delete this stream?</p>
+          <button onClick={confirmDelete}>Yes</button>
+          <button onClick={cancelDelete}>No</button>
+          </div>
+           )} */}
 
+        {/* {showConfirmation && (
+          <div>
+            <div className={styles.overlay} onClick={cancelDelete}></div>
+            <div className={styles.modal}>
+              <p>Are you sure you want to delete this stream?</p>
+              <button onClick={confirmDelete}>Yes</button>
+              <button onClick={cancelDelete}>No</button>
+          </div>
+          </div>
+        )} */}
 
-      {qrCodeURL && (
-    <div style={{ marginTop: '100px',marginLeft:'40px' }}>
-    <QRCode value={qrCodeURL} size={400} />
-          {/* <p>{qrCodeURL}</p> */}
-          <p>Scan and be a part of the Stream. We're excited to have you with us!</p>
+{showConfirmation && (
+        <div>
+          <div
+            style={{
+              display: 'block',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 999
+            }}
+            onClick={cancelDelete}
+          ></div>
+          <div
+            style={{
+              display: 'block',
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'white',
+              padding: '70px',
+              borderRadius: '8px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+              zIndex: 1000
+            }}
+          >
+            <p>Are you sure you want to delete this stream?</p>
+            <button style={{ backgroundColor: 'green', marginTop: '50px',marginLeft: '50px',marginRight: '200px', padding: '20px 40px', fontSize: '16px' }} onClick={confirmDelete}>Yes</button>
+            <button style={{ backgroundColor: 'red', padding: '20px 40px', fontSize: '16px' }} onClick={cancelDelete}>No</button>
+          </div>
         </div>
       )}
-    </div>
+
+
+          {qrCodeURL && (
+        <div style={{ marginTop: '100px',marginLeft:'40px' }}>
+        <QRCode value={qrCodeURL} size={400} />
+              {/* <p>{qrCodeURL}</p> */}
+              <p>Scan and be a part of the Stream. We're excited to have you with us!</p>
+            </div>
+          )}
+        </div>
 
 
 
