@@ -131,8 +131,14 @@ const EditStreamPage = () => {
           value={newColor}
           onChange={(e) => setNewColor(e.target.value)}
         />
+
+        
       </div> */}
-      <div className="input-field" style={{ marginLeft: '60px' }}>
+    <div className="colorfield" style={{ marginLeft: '60px', fontSize:'18px' }}>
+      <label><b>Select a new color for the stream</b></label>
+     
+    </div>
+        <div className="input-field" style={{ marginLeft: '60px' }}>
   <i className="fas fa-user"></i>
   <input 
     type="text" 
@@ -143,8 +149,10 @@ const EditStreamPage = () => {
 </div>
 
 
+
 <div className="colorfield" style={{ marginLeft: '90px' }}>
-<HuePicker color={background} onChange={handleColorChange} />
+  {/* <label>Enter new color for the stream</label> */}
+  <HuePicker color={background} onChange={handleColorChange} />
 </div>
       
       <div className="input-container">
