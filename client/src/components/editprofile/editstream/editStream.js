@@ -5,19 +5,31 @@ import manageProfileImage from '../../../img/manageprofile.png'; // Import the m
 import messageImage from '../../../img/message.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate and useLocation hooks
 import { firebaseApp } from '../../../firebase'; // Import your Firebase configuration
-
+import { HuePicker } from 'react-color';
 const EditStreamPage = () => {
   const navigate = useNavigate(); // Initialize useNavigate
   const location = useLocation(); // Get the location object
+  const [hexCode, setHexCode] = useState('#fff');
+  const [background, setBackground] = useState('#fff');
 
   const [color, setColor] = useState('#FFFFFF'); // Initial color state
   const [newLogoUrl, setNewLogoUrl] = useState(''); // State for new logo URL
 
   const userData = location.state ? location.state.userData : null; // Retrieve userData from location state if available
-
+  const handleChangeComplete = (color) => {
+    setBackground(color.hex);
+    setHexCode(color.hex);
+  };
+ 
+  const handleHexCodeChange = (event) => {
+    const newHexCode = event.target.value;
+    setHexCode(newHexCode);
+    setBackground(newHexCode);
+  };
   const handleSaveChanges = async () => {
     try {
       const currentUser = firebaseApp.auth().currentUser;
+     
   
       if (!currentUser) {
         // Handle scenario where the user is not authenticated
@@ -100,14 +112,27 @@ const EditStreamPage = () => {
       </div>
 
       {/* Input Fields and Button */}
-      <div className="color-change">
+      {/* <div className="color-change">
         <p className="edit-text">Edit color and stream</p>
         <input
           type="color"
           value={color}
           onChange={(e) => setColor(e.target.value)}
         />
-      </div>
+      </div> */}
+
+      <div className="input-field"  style={{ marginLeft: '70px' }}>
+  <i className="fas fa-user"></i>
+  <input 
+    type="text" 
+    id="hexcode" 
+    value={hexCode} 
+    onChange={handleHexCodeChange} 
+  />
+</div>
+<div className="colorfield" style={{ marginLeft: '100px' }}>
+  <HuePicker color={background} onChangeComplete={handleChangeComplete} />
+</div>
       
       <div className="input-container">
         <input

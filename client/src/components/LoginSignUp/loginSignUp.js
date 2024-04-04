@@ -115,7 +115,7 @@ function SignInSignUpForm() {
   // Validation checks
   const newErrors = {};
   if (!username) {
-    newErrors.username = "Please enter Stream Name.";
+    newErrors.username = "Please enter Email.";
   }
   if (!password) {
     newErrors.password = "Please enter password.";
@@ -176,7 +176,7 @@ function SignInSignUpForm() {
   <h2 className="title">Sign in</h2>
   <div className="input-field">
     <i className="fas fa-user"></i>
-    <input type="text" placeholder="Stream Name" id='username'/>
+    <input type="text" placeholder="Email" id='username'/>
   </div>
   {errors.username && <div className="error-message red-text">{errors.username}</div>}
   <div className="input-field">
