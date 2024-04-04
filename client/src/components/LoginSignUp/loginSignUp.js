@@ -133,6 +133,8 @@ function SignInSignUpForm() {
   }
   const handleChangeComplete = (color) => {
     setBackground(color.hex);
+    setHexCode(color.hex);
+    // setNewColor(color.hex);
   };
 
   const [inputValue, setInputValue] = useState('')
