@@ -128,7 +128,7 @@ const Stream = () => {
  
   const handleDownloadPDF = () => {
     // Construct the URL of the PDF file stored in the public folder
-    const pdfUrl = process.env.PUBLIC_URL + '/streampdf.pdf';
+    const pdfUrl = process.env.PUBLIC_URL + '/instructions.pdf';
     // Trigger the download of the PDF file
     window.open(pdfUrl, '_blank');
   };
