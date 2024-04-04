@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { firebaseApp } from '../firebase';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import QRCode from 'qrcode.react'; // Import the QRCode component
+import {   HuePicker } from 'react-color'
 
 import {
   Button,
@@ -36,10 +37,41 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
  
 const Stream = () => {
   const [userData, setUserData] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState('#000000');
-
+  
+  
+  const [background, setBackground] = useState('#fff');
+  const [hexCode, setHexCode] = useState('#fff');
+  
   const [qrCodeURL, setQrCodeURL] = useState(null);
+  
+  const [backgroundColor, setBackgroundColor] = useState('#000000');
+  
+  // edit stream variables
+  const [streamName, setStreamName] = useState(null);
+  const [newStreamColor, setNewStreamColor] = useState(''); // use backgroundColor
+  const [newLogoURl, setNewLogoUrl] = useState('');
+
+
+
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const[editInformation, setEditInformation] = useState(false);
+
+
+  const handleHexCodeChange = (event) => {
+    const newHexCode = event.target.value;
+    setHexCode(newHexCode);
+    setBackground(newHexCode);
+  };
+  const handleChangeComplete = (color) => {
+    setBackground(color.hex);
+  };
+  const handleColorChange = (color) => {
+    setBackground(color.hex);
+    setHexCode(color.hex);
+    setNewStreamColor(color.hex);
+    // setNewColor(color.hex);
+  };
+  // const[oldStreamName]
 
   // const [textColor, setTextColor] = useState(null);
   // const [backgroundColor, setBackgroundColor] = useState(() => {
@@ -73,6 +105,9 @@ const Stream = () => {
       if (doc.exists) {
         const userDataFromFirestore = doc.data();
         setUserData(userDataFromFirestore);
+        // setStreamName(userData.username.toLowerCase())
+        setStreamName('newStream')
+        console.log("Stream name: ",streamName)
         const backgroundColor = userDataFromFirestore ? userDataFromFirestore.color : '#FF0000';
         console.log(userDataFromFirestore.username);
         console.log(userDataFromFirestore.url);
@@ -128,7 +163,7 @@ const Stream = () => {
  
   const handleDownloadPDF = () => {
     // Construct the URL of the PDF file stored in the public folder
-    const pdfUrl = process.env.PUBLIC_URL + '/streampdf.pdf';
+    const pdfUrl = process.env.PUBLIC_URL + '/instructions.pdf';
     // Trigger the download of the PDF file
     window.open(pdfUrl, '_blank');
   };
@@ -160,7 +195,7 @@ const createStream = async () => {
       
       {
         // name: userData.username,
-        name: normalizedUsername, // Use normalized username
+        name: streamName, // Use normalized username
 
         bannerColor: userData.color,
         logoUrl: userData.url,
@@ -169,6 +204,7 @@ const createStream = async () => {
         headers: {
           'Origin': 'http://localhost:3000', // Replace with your actual origin
           'X-Requested-With': 'XMLHttpRequest', // Optional header for some proxy services
+          'Retry-After': 3600
         },
       }
     );
@@ -192,19 +228,20 @@ const createStream = async () => {
 };
 
 const renameStream = async () => {
+  
   let response;
   try {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const apiUrl = 'https://api.deafassistant.com/stream/RenameStream';
 
-    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing if needed
+    // const normalizedUsername = userData.username.toLowerCase(); // Normalize casing if needed
      response = await axios.post(
       proxyUrl + apiUrl,
       {
-        oldName: normalizedUsername,
-        name: 'test2', // New name for the stream
-        bannerColor: userData.color, // Use color from userData
-        logoUrl: userData.url, // Use URL from userData
+        oldName: streamName,
+        name: streamName, // New name for the stream
+        bannerColor: newStreamColor, // Use color from userData
+        logoUrl: newLogoURl, // Use URL from userData
       },
       {
         headers: {
@@ -215,6 +252,12 @@ const renameStream = async () => {
     );
 
     console.log('Stream renamed:', response.data);
+    const { filePath } = response.data;
+    console.log("New url : ", filePath)
+    setQrCodeURL(filePath);
+    setEditInformation(false);
+   
+    
   } catch (error) {
     console.error('Error creating stream:', error);
     if (error.response && error.response.status === 400) {
@@ -238,7 +281,7 @@ const deleteStream = async () => {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const apiUrl = 'https://api.deafassistant.com/stream/DeleteStream';
 
-    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing
+    // const normalizedUsername = userData.username.toLowerCase(); // Normalize casing
 
 
     const response = await axios.post(
@@ -247,7 +290,7 @@ const deleteStream = async () => {
       {
         // oldName: userData?.username || 'Default Username', // Change this to the appropriate field for oldName
         // oldName: userData.username
-        oldName: normalizedUsername, // Use normalized username
+        oldName: streamName, // Use normalized username
 
 
       },
@@ -275,6 +318,7 @@ const deleteStream = async () => {
 const cancelDelete = () => {
   // Hide confirmation popup
   setShowConfirmation(false);
+  setEditInformation(false);
   // You might want to do something else here, like maybe closing a modal
 };
 
@@ -284,7 +328,9 @@ const cancelDelete = () => {
   };
 
   const handleEditStream =() =>{
-    renameStream();
+    setEditInformation(true);
+   
+    // setQrCodeURL(null);
   }
 
   const handleDeleteStream = () => {
@@ -329,30 +375,108 @@ const cancelDelete = () => {
                         {qrCodeURL && <p>{qrCodeURL}</p>} */}
 
           <div>
-          <button variant="contained"  style={{ marginRight: '100px',padding: '20px 40px', fontSize: '16px'  }} onClick={handleCreateStream}>Create Stream</button>
+          <button variant="contained"  style={{ marginRight: '100px',padding: '20px 40px', Size: '16px'  }} onClick={handleCreateStream}>Create Stream</button>
           <button variant="contained"  style={{ marginRight: '100px', padding: '20px 40px', fontSize: '16px'  }} onClick={handleDeleteStream}>Delete Stream</button>
           <button variant="contained"  style={{ marginRight: '100px', padding: '20px 40px', fontSize: '16px'  }} onClick={handleEditStream}>Edit Stream</button>
 
-          {/* {showConfirmation && (
-          <div className={`confirmation-popup ${showConfirmation ? 'show' : ''}`}>
-          <p>Are you sure you want to delete this stream?</p>
-          <button onClick={confirmDelete}>Yes</button>
-          <button onClick={cancelDelete}>No</button>
-          </div>
-           )} */}
+         
+          {editInformation && (
+                      <div>
+                        <div
+                          style={{
+                            display: 'block',
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                            zIndex: 999
+                          }}
+                          onClick={cancelDelete}
+                        ></div>
+                        <div
+                          style={{
+                            display: 'block',
+                            position: 'fixed',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            backgroundColor: 'white',
+                            padding: '70px',
+                            borderRadius: '8px',
+                            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
+                            zIndex: 1000
+                          }}
+                        >
+                          <p>Enter the new stream information</p>
+                          <input
+                              type="text"
+                              placeholder="New Name"
+                              style={{
+                                marginTop: '20px',
+                                width: '100%',
+                                padding: '10px',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                                marginBottom: '10px'
+                              }}
+                              onChange={(e) => setStreamName(e.target.value)}
+                            />
+                          <input
+                            
+                            type="text"
+                            placeholder="New Logo URL"
+                            style={{
+                              marginTop: '10px',
+                              width: '100%',
+                              padding: '10px',
+                              borderRadius: '4px',
+                              border: '1px solid #ccc',
+                              marginBottom: '20px'
+                            }}
+                            onChange={(e) => setNewLogoUrl(e.target.value)}
+                            
+                          />
+                            <p style={{
+                              fontSize: "18px"
+                            }}>Select the new color</p>
+                            <div className="input-field" style={{ marginLeft: '0px' }}>
+                              <i className="fas fa-user"></i>
+                              <input
+                                
+                                type="text"
+                                id="hexcode"
+                                value={hexCode}
+                                onChange={handleHexCodeChange}
+                              />
+                            </div>
+                            
+                            
+                            <div className="colorfield" style={{ 
+                              marginLeft: '10px',
+                              marginBottom: '30px', 
+                              marginTop: '10px'
+                              }}>
+                            <HuePicker color={background} onChange={handleColorChange} />
+                            </div>
+                          <button
+                            style={{
+                              backgroundColor: '#1b4375',
+                              marginRight: '10px',
+                              padding: '10px 20px',
+                              fontSize: '16px'
+                            }}
+                            onClick={renameStream}
+                          >
+                            Edit stream
+                          </button>
+                         
+                            </div>
+                          </div>
+                        )}
 
-        {/* {showConfirmation && (
-          <div>
-            <div className={styles.overlay} onClick={cancelDelete}></div>
-            <div className={styles.modal}>
-              <p>Are you sure you want to delete this stream?</p>
-              <button onClick={confirmDelete}>Yes</button>
-              <button onClick={cancelDelete}>No</button>
-          </div>
-          </div>
-        )} */}
-
-{showConfirmation && (
+        {showConfirmation && (
         <div>
           <div
             style={{
@@ -397,6 +521,9 @@ const cancelDelete = () => {
             </div>
           )}
         </div>
+
+          
+        
 
 
 
@@ -510,16 +637,32 @@ const cancelDelete = () => {
           </button>
           <DialogContent dividers>
           <Typography gutterBottom>
-  <p>
-  Access the exclusive content by copying the stream link. Indulge in lively debates and exercises facilitated by our hosts. In need of help? See our troubleshooting guide or contact our customer service staff.  </p>
-  {/* Display the URL as text */}<br/>
-  <p>
+    <p>
+      Access the exclusive content by copying the stream link. Indulge in lively debates and exercises facilitated 
+      by our hosts. In need of help? See our troubleshooting guide or contact our customer service staff.  
+    </p>  
+  <br/>
+
+
+  {/* <p>
     Stream{" "}
     <a href={`https://deafassistant.com/${userData && userData.username.toLowerCase()}`} target="_blank" rel="noopener noreferrer">
-  {`https://deafassistant.com/${userData && userData.username.toLowerCase()}`}
-</a>
+    {`https://deafassistant.com/${userData && userData.username.toLowerCase()}`}
+  </a>
 
-  </p></Typography>
+  </p> */}
+
+
+  <p>
+    Stream{" "}
+    <a href={`${qrCodeURL}`} target="_blank" rel="noopener noreferrer">
+    {`${qrCodeURL}`}
+  </a>
+
+  </p>
+  
+  
+  </Typography>
 
           </DialogContent>
           <DialogActions>
