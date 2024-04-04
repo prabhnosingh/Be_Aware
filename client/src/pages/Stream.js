@@ -181,6 +181,8 @@ const createStream = async () => {
     console.error('Error creating stream:', error);
     if (error.response && error.response.status === 400) {
       console.log('Stream already exists:', error.response.data);
+      deleteStream();
+      createStream();
       console.log(response)
       setQrCodeURL(error.response.data.filePath); // Update QR code URL if needed
     } else {
