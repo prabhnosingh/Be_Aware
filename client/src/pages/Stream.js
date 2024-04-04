@@ -228,17 +228,18 @@ const createStream = async () => {
 };
 
 const renameStream = async () => {
+  setEditInformation(false);
   
   let response;
   try {
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const apiUrl = 'https://api.deafassistant.com/stream/RenameStream';
 
-    // const normalizedUsername = userData.username.toLowerCase(); // Normalize casing if needed
+    const normalizedUsername = userData.username.toLowerCase(); // Normalize casing if needed
      response = await axios.post(
       proxyUrl + apiUrl,
       {
-        oldName: streamName,
+        oldName: normalizedUsername,
         name: streamName, // New name for the stream
         bannerColor: newStreamColor, // Use color from userData
         logoUrl: newLogoURl, // Use URL from userData
@@ -255,7 +256,7 @@ const renameStream = async () => {
     const { filePath } = response.data;
     console.log("New url : ", filePath)
     setQrCodeURL(filePath);
-    setEditInformation(false);
+    
    
     
   } catch (error) {
